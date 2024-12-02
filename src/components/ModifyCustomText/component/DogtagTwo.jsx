@@ -1,34 +1,70 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 
-const DogtagTwo = () => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+const DogTagtwo = ({ onChange }) => {
+  const [localData, setLocalData] = useState({
+    inputA: "",
+    inputB: "",
+    inputC: "",
+    inputD: "",
+    inputE: "",
+    inputF: "",
+  });
 
-  const onSubmit = (data) => console.log(data);
+  useEffect(() => {
+    onChange(localData); 
+  }, [localData, onChange]);
 
-  console.log(watch("example"));
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setLocalData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   return (
-    <form className=" space-y-5" onSubmit={handleSubmit(onSubmit)}>
-      <h1 className=" text-center text-2xl text-white py-1">Dog Tag 2 </h1>
-
-      <Input {...register("input1")} />
-      <Input {...register("input2")} />
-      <Input {...register("input2")} />
-      <Input {...register("input2")} />
-      <Input {...register("input2")} />
-      <Input {...register("input2")} />
-      <Input {...register("input2")} />
-
-      {errors.exampleRequired && <span>This field is required</span>}
-    </form>
+    <div className="space-y-5 p-5 border rounded-lg">
+      <h1 className="text-center text-2xl">Dog Tag 2</h1>
+      <Input
+        name="inputA"
+        value={localData.inputA}
+        onChange={handleInputChange}
+        placeholder="Input A"
+      />
+      <Input
+        name="inputB"
+        value={localData.inputB}
+        onChange={handleInputChange}
+        placeholder="Input B"
+      />
+      <Input
+        name="inputC"
+        value={localData.inputC}
+        onChange={handleInputChange}
+        placeholder="Input C"
+      />
+      <Input
+        name="inputD"
+        value={localData.inputD}
+        onChange={handleInputChange}
+        placeholder="Input D"
+      />
+      <Input
+        name="inputE"
+        value={localData.inputE}
+        onChange={handleInputChange}
+        placeholder="Input E"
+      />
+      <Input
+        name="inputF"
+        value={localData.inputF}
+        onChange={handleInputChange}
+        placeholder="Input F"
+      />
+    </div>
   );
 };
 
-export default DogtagTwo;
+export default DogTagtwo;

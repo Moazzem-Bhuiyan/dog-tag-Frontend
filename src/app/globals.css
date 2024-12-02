@@ -17,6 +17,49 @@ li {
   text-decoration: none;
   list-style-type: none;
 }
+.py-2 {
+  padding-top: 0;
+  padding-bottom: 0;
+  color: black;
+}
+
+.text-3d-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-3d {
+  font-family: 'Courier New', Courier, monospace;
+  font-size:18px;
+  font-weight: bold;
+  color: #fff;  /* Light color for the main text */
+  position: relative;
+  text-transform: uppercase;
+  margin: 1px;
+  text-align: center;
+  display: inline-block;
+}
+
+.text-3d:before {
+  content: attr(data-shadow);
+  position: absolute;
+  top: 1px;
+  left: 4px;
+  z-index: -1;
+  color: rgba(0, 0, 0, 0.6);  /* Darker shadow for contrast */
+  transform: translateZ(-1px) scale(1.1);
+}
+
+.text-3d:nth-child(even) {
+  text-shadow: 6px 6px 10px rgba(0, 0, 0, 0.6);  /* Stronger shadow effect */
+}
+
+.text-3d:nth-child(odd) {
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6);  /* Lighter shadow effect */
+}
+
 
 @layer base {
   :root {

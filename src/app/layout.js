@@ -2,6 +2,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Hero from "@/components/shared/Hero";
 import Footer from "@/components/shared/Footer";
+import { FormProvider } from "@/components/context/FormContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,7 +27,9 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Hero />
-        {children}
+    <FormProvider>
+    {children}
+    </FormProvider>
         <Footer />
       </body>
     </html>
