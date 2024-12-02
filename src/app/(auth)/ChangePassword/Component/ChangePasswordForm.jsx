@@ -1,8 +1,7 @@
-"use client"
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-
 
 const ChangePasswordForm = () => {
   const {
@@ -73,7 +72,7 @@ const ChangePasswordForm = () => {
         </div>
 
         <Button type="submit" className="mt-5">
-          Update
+          Save Change
         </Button>
       </form>
     </div>

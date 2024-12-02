@@ -4,7 +4,7 @@ const Navber = ({ onLoginClick }) => {
   const Navlink = [
     { title: "Home", link: "/Home" },
     { title: "Gifts", link: "#" },
-    { title: "Services", link: "#" },
+    { title: "Services", link: "/VerifyCode" },
     { title: "Contact", link: "/ChangePassword" },
   ];
 

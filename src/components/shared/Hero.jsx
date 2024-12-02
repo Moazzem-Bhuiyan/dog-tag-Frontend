@@ -7,11 +7,16 @@ import Navber from "./Navber";
 import LoginPage from "@/app/(auth)/Login/component/LoginForm";
 import RegisterModal from "@/app/(auth)/Register/Component/RegisterForm";
 import ForgetPasswordModal from "@/app/(auth)/ForgetPassword/page";
+import VerifyModal from "@/app/(auth)/VerifyCode/page";
+import UpdatePasswordForm from "@/app/(auth)/UpdatePassword/Component/UpdatePasswordForm";
 
 const Hero = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [isForgetPasswordOpen, setIsForgetPasswordOpen] = useState(false);
+  const [isverifycodedOpen, setIsverifycodeOpen] = useState(false);
+  const [isupdatepasswordOpen, setIsupdatepasswordOpen] = useState(false);
+
   const handleOpenLogin = () => {
     setIsLoginOpen(true);
     setIsRegisterOpen(false);
@@ -28,6 +33,8 @@ const Hero = () => {
     setIsLoginOpen(false);
     setIsRegisterOpen(false);
     setIsForgetPasswordOpen(false);
+    setIsverifycodeOpen(false);
+    setIsupdatepasswordOpen(false);
   };
 
   const handleOpenForgetPassword = () => {
@@ -35,6 +42,15 @@ const Hero = () => {
     setIsLoginOpen(false);
   };
 
+  const handleOpenVerifyCode = () => {
+    setIsverifycodeOpen(true);
+    setIsForgetPasswordOpen(false);
+  };
+
+  const handleUpdatePassword = () => {
+    setIsupdatepasswordOpen(true);
+    setIsverifycodeOpen(false);
+  };
   return (
     <div className="bg-main h-[60vh] flex justify-center items-center">
       <div className="relative w-full">
@@ -65,6 +81,17 @@ const Hero = () => {
           {/* Forget Password Modal */}
           <ForgetPasswordModal
             isOpen={isForgetPasswordOpen}
+            onClose={handleCloseAll}
+            onpenVerifyCodeclick={handleOpenVerifyCode}
+          />
+
+          <VerifyModal
+            isOpen={isverifycodedOpen}
+            onClose={handleCloseAll}
+            OnupdatePassClick={handleUpdatePassword}
+          />
+          <UpdatePasswordForm
+            isOpen={isupdatepasswordOpen}
             onClose={handleCloseAll}
           />
         </>

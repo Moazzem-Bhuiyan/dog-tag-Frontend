@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 
-const ForgetPasswordModal = ({ isOpen, onClose }) => {
+const ForgetPasswordModal = ({ isOpen, onClose,onpenVerifyCodeclick }) => {
   const {
     register,
     handleSubmit,
@@ -23,7 +23,7 @@ const ForgetPasswordModal = ({ isOpen, onClose }) => {
       centered
       open={isOpen}
       onCancel={onClose}
-      footer={null} // Custom footer
+      footer={null} 
     >
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -44,6 +44,7 @@ const ForgetPasswordModal = ({ isOpen, onClose }) => {
         </div>
 
         <Button
+        onClick={onpenVerifyCodeclick}
           type="submit"
           className="relative group px-6 py-3 font-medium text-black bg-black overflow-hidden mt-5"
         >
@@ -53,6 +54,8 @@ const ForgetPasswordModal = ({ isOpen, onClose }) => {
           </span>
         </Button>
       </form>
+
+
     </Modal>
   );
 };
