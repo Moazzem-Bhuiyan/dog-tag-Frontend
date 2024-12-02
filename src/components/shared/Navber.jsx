@@ -1,47 +1,33 @@
-import DialogLogin from "@/app/(auth)/Login/page";
 import Link from "next/link";
 
-const Navber = () => {
+const Navber = ({ onLoginClick }) => {
   const Navlink = [
-    {
-      title: "Home",
-      link: "#",
-    },
-    {
-      title: "Gifts",
-      link: "#",
-    },
-    {
-      title: "Services",
-      link: "#",
-    },
-    {
-      title: "Contact",
-      link: "#",
-    },
-    {
-      title: "Login",
-      link: "#",
-    },
+    { title: "Home", link: "#" },
+    { title: "Gifts", link: "#" },
+    { title: "Services", link: "#" },
+    { title: "Contact", link: "#" },
   ];
 
   return (
-    <div className="flex justify-center gap-44 w-full">
+    <div className="flex flex-col md:flex-row justify-center items-center md:gap-10 lg:gap-40 w-full p-4">
       {Navlink.map((item, index) => (
-        <div key={index}>
-          {item.title === "Login" ? (
-            <Link href="/Login">
-              <DialogLogin>
-                <h1 className="cursor-pointer">{item.title}</h1>
-              </DialogLogin>
-            </Link>
-          ) : (
-            <Link href={item.link}>
-              <h1>{item.title}</h1>
-            </Link>
-          )}
+        <div key={index} className="mb-2 md:mb-0">
+          <Link href={item.link}>
+            <h1 className="">
+              {item.title}
+            </h1>
+          </Link>
         </div>
       ))}
+
+      <div className="mt-2 md:mt-0">
+        <button
+          onClick={onLoginClick}
+          className=""
+        >
+          Login
+        </button>
+      </div>
     </div>
   );
 };

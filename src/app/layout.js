@@ -28,8 +28,6 @@ export default function RootLayout({ children }) {
         <Hero />
         {children}
         <Footer />
-
-
       </body>
     </html>
   );

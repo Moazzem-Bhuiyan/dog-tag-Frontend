@@ -12,7 +12,7 @@ const DogtagPreview = () => {
           <Image className=" w-full" src={plate} alt="img" />
         </div>
         <div>
-          <Image className=" w-full"  src={plate} alt="img" />
+          <Image className=" w-full" src={plate} alt="img" />
         </div>
       </div>
     </div>
