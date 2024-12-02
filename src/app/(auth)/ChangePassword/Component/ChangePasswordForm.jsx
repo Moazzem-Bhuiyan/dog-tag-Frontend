@@ -1,12 +1,10 @@
-"use client";
 
-import React from "react";
-import { Modal } from "antd";
-import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
+"use client"
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
 
-const RegisterModal = ({ isOpen, onClose, onLoginClick }) => {
+const ChangePasswordForm = () => {
   const {
     register,
     handleSubmit,
@@ -14,13 +12,12 @@ const RegisterModal = ({ isOpen, onClose, onLoginClick }) => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log("Register Data:", data);
+    console.log("ChangePassword:", data);
     // onClose(); // Optionally close the modal after registration
   };
 
   return (
-    <Modal centered open={isOpen} onCancel={onClose} footer={null}>
-      
+    <div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-4 py-10"
@@ -71,16 +68,8 @@ const RegisterModal = ({ isOpen, onClose, onLoginClick }) => {
           Register
         </Button>
       </form>
-
-      <Button
-        onClick={onLoginClick}
-        className="text-white text-center w-full mx-auto"
-        variant="link"
-      >
-        Already have an account? <span className="text-red-500">Login</span>
-      </Button>
-    </Modal>
+    </div>
   );
 };
 
-export default RegisterModal;
+export default ChangePasswordForm;
