@@ -2,9 +2,9 @@ import Link from "next/link";
 
 const Navber = ({ onLoginClick }) => {
   const Navlink = [
-    { title: "Home", link: "/Home" },
+    { title: "Home", link: "/" },
     { title: "Gifts", link: "#" },
-    { title: "Services", link: "/VerifyCode" },
+    { title: "Services", link: "#" },
     { title: "Contact", link: "/ChangePassword" },
   ];
 
