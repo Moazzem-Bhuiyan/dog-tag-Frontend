@@ -4,7 +4,6 @@ import FontType from "@/components/FontType/FontType";
 import HomeCard from "@/components/HomeCard/HomeCard";
 import ModifyCustomCustomText from "@/components/ModifyCustomText/ModifyCustomCustomText";
 
-
 const HomePage = () => {
   return (
     <div>

@@ -1,8 +1,10 @@
+"use client"
 import React from "react";
 import { Modal } from "antd";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
+
 import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
 
 const ForgetPasswordModal = ({ isOpen, onClose }) => {
   const {
