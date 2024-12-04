@@ -17,7 +17,7 @@ li {
   text-decoration: none;
   list-style-type: none;
 }
-.py-2 {
+.plate {
   padding-top: 0;
   padding-bottom: 0;
   color: black;
@@ -31,10 +31,10 @@ li {
 }
 
 .text-3d {
-  font-family: 'Courier New', Courier, monospace;
-  font-size:18px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 18px;
   font-weight: bold;
-  color: #fff;  /* Light color for the main text */
+  color: #fff; /* Light color for the main text */
   position: relative;
   text-transform: uppercase;
   margin: 1px;
@@ -48,18 +48,45 @@ li {
   top: 1px;
   left: 4px;
   z-index: -1;
-  color: rgba(0, 0, 0, 0.6);  /* Darker shadow for contrast */
+  color: rgba(0, 0, 0, 0.6); /* Darker shadow for contrast */
   transform: translateZ(-1px) scale(1.1);
 }
 
 .text-3d:nth-child(even) {
-  text-shadow: 6px 6px 10px rgba(0, 0, 0, 0.6);  /* Stronger shadow effect */
+  text-shadow: 6px 6px 10px rgba(0, 0, 0, 0.6); /* Stronger shadow effect */
 }
 
 .text-3d:nth-child(odd) {
-  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6);  /* Lighter shadow effect */
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6); /* Lighter shadow effect */
 }
 
+/* progress ber */
+
+/* Reset body margin */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Styling for headings */
+h1 {
+  text-align: center;
+  margin: 20px 0;
+}
+
+/* The progress bar styling (if needed) */
+.progress-bar {
+  height: 4px;
+  background: #ffffff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  transform-origin: 0%;
+  z-index: 1000;
+}
+
+/* animated button */
 
 @layer base {
   :root {

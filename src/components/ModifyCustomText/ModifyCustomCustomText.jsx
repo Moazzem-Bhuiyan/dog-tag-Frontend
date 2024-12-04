@@ -26,7 +26,7 @@ const ModifyCustomCustomText = () => {
       <div className=" flex justify-center">
         <Button
           onClick={handleGlobalSubmit}
-          className=" bg-main text-center text-2xl w-full max-w-[30%] mx-auto my-20 p-2 "
+          className=" bg-main text-center text-2xl w-full max-w-[30%] mx-auto my-20 py-6 border border-white"
         >
           Update Dog Tag
         </Button>

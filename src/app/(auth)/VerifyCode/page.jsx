@@ -2,7 +2,7 @@ import React from "react";
 import VerifyCodeForm from "./component/VerifyCodeForm";
 import { Modal } from "antd";
 
-const VerifyModal = ({ isOpen, onClose ,OnupdatePassClick}) => {
+const VerifyModal = ({ isOpen, onClose, OnupdatePassClick }) => {
   return (
     <Modal centered open={isOpen} onCancel={onClose} footer={null}>
       <div className=" space-y-10 my-10 ">

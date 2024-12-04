@@ -6,13 +6,15 @@ import { useFormContext } from "../context/FormContext";
 
 const DogtagPreview = () => {
   const { formData } = useFormContext();
+
   const renderFormData = (form) => {
     return Object.entries(form).map(([key, value]) => (
-      <div key={key} className="py-2">
+      <div key={key} className="plate py-2">
         {value}
       </div>
     ));
   };
+
   return (
     <div>
       <CustomHeadline title="My Dog Tag" />
@@ -28,12 +30,13 @@ const DogtagPreview = () => {
             </h1>
           </div>
         </div>
+
         <div
           className="relative w-full h-52 bg-cover bg-center"
           style={{ backgroundImage: "url('/plate.png')" }}
         >
           <div className="absolute ml-40 mt-8">
-            <h1 className=" text-3d font-mono text-center  uppercase font-bold text-black">
+            <h1 className=" text-3d uppercase text-center font-bold text-black">
               {renderFormData(formData.form2)}
             </h1>
           </div>

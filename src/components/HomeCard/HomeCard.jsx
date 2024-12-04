@@ -2,7 +2,6 @@ import Image from "next/image";
 import Card1 from "/public/card1.png";
 import Card2 from "/public/card2.png";
 import Card3 from "/public/card3.png";
-import CustomHeadline from "../CustomHeadline/CustomHeadline";
 
 const HomeCard = () => {
   const card = [
@@ -47,7 +46,10 @@ const HomeCard = () => {
 
       <div className=" grid grid-cols-3 gap-10 justify-center items-center w-full max-w-[80%]  mx-auto mt-20 ">
         {card.map((card, index) => (
-          <div className=" bg-main p-12 px-12 space-y-5" key={index}>
+          <div
+            className=" bg-main p-12 px-12 space-y-5 rounded-md max-w-sm mx-auto h-auto shadow-none transition-shadow duration-300 cursor-pointer hover:shadow-lg hover:shadow-white "
+            key={index}
+          >
             <div className=" flex justify-center items-center  ">
               <Image src={card.img} alt="cardImg" />
             </div>

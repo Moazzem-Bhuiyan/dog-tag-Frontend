@@ -10,11 +10,10 @@ const DogTagone = ({ onChange }) => {
     input4: "",
     input5: "",
     input6: "",
-  
   });
 
   useEffect(() => {
-    onChange(localData); // Send local data back to the parent on every change
+    onChange(localData); 
   }, [localData, onChange]);
 
   const handleInputChange = (e) => {
@@ -32,37 +31,31 @@ const DogTagone = ({ onChange }) => {
         name="input1"
         value={localData.input1}
         onChange={handleInputChange}
-        placeholder="Input 1"
       />
       <Input
         name="input2"
         value={localData.input2}
         onChange={handleInputChange}
-        placeholder="Input 2"
       />
       <Input
         name="input3"
         value={localData.input3}
         onChange={handleInputChange}
-        placeholder="Input 3"
       />
       <Input
         name="input4"
         value={localData.input4}
         onChange={handleInputChange}
-        placeholder="Input 4"
       />
       <Input
         name="input5"
         value={localData.input5}
         onChange={handleInputChange}
-        placeholder="Input 5"
       />
       <Input
         name="input6"
         value={localData.input6}
         onChange={handleInputChange}
-        placeholder="Input 6"
       />
     </div>
   );

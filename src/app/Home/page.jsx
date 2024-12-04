@@ -3,11 +3,12 @@ import DogtagPreview from "@/components/DogtagPreview/DogtagPreview";
 import FontType from "@/components/FontType/FontType";
 import HomeCard from "@/components/HomeCard/HomeCard";
 import ModifyCustomCustomText from "@/components/ModifyCustomText/ModifyCustomCustomText";
+import HomePageProduct from "../HomepageProduct/page";
 
 const HomePage = () => {
   return (
     <div>
-      {/* <Hero /> */}
+     <HomePageProduct/>
       <HomeCard />
       <DogtagPreview />
       <ModifyCustomCustomText />

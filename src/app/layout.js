@@ -3,6 +3,9 @@ import "./globals.css";
 import Hero from "@/components/shared/Hero";
 import Footer from "@/components/shared/Footer";
 import { FormProvider } from "@/components/context/FormContext";
+import ProgressBar from "@/components/shared/Progressber";
+import ScrollToTop from "@/components/shared/ScrollTopButton";
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,10 +29,19 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* Include the ProgressBar */}
+        <ProgressBar />
+
+        {/* Hero Section */}
         <Hero />
-    <FormProvider>
-    {children}
-    </FormProvider>
+
+        {/* Form Context Provider */}
+        <FormProvider>
+          {children}
+        </FormProvider>
+        <ScrollToTop/>
+
+        {/* Footer */}
         <Footer />
       </body>
     </html>

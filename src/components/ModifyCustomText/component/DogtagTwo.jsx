@@ -2,7 +2,7 @@
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 
-const DogTagtwo = ({ onChange }) => {
+const DogTagtwo = ({ onChange ,resetForm}) => {
   const [localData, setLocalData] = useState({
     inputA: "",
     inputB: "",
@@ -13,8 +13,23 @@ const DogTagtwo = ({ onChange }) => {
   });
 
   useEffect(() => {
-    onChange(localData); 
+    onChange(localData);
   }, [localData, onChange]);
+
+  useEffect(() => {
+    if (resetForm) {
+      setLocalData({
+        input1: "",
+        input2: "",
+        input3: "",
+        input4: "",
+        input5: "",
+        input6: "",
+      });
+    }
+  }, [resetForm]);
+
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -31,37 +46,31 @@ const DogTagtwo = ({ onChange }) => {
         name="inputA"
         value={localData.inputA}
         onChange={handleInputChange}
-        placeholder="Input A"
       />
       <Input
         name="inputB"
         value={localData.inputB}
         onChange={handleInputChange}
-        placeholder="Input B"
       />
       <Input
         name="inputC"
         value={localData.inputC}
         onChange={handleInputChange}
-        placeholder="Input C"
       />
       <Input
         name="inputD"
         value={localData.inputD}
         onChange={handleInputChange}
-        placeholder="Input D"
       />
       <Input
         name="inputE"
         value={localData.inputE}
         onChange={handleInputChange}
-        placeholder="Input E"
       />
       <Input
         name="inputF"
         value={localData.inputF}
         onChange={handleInputChange}
-        placeholder="Input F"
       />
     </div>
   );
