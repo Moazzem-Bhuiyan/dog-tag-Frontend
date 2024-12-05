@@ -23,7 +23,7 @@ const FontTypeOne = () => {
             2mm x 3mm characters are raised above surface. This modern military
             font is the most popular, select this if you are unsure. Has the
             most available characters &
-            symbols:A…Z 0…9*.# ? $ % ! : ; • + = , \ / & _-¯() @ Ø © ® ™☆ ✝ ✡ ♡       
+            symbols:A…Z 0…9*.# ? $ % ! : ; • + = , \ / & _-¯() @ Ø © ® ™☆ ✝ ✡ ♡    
           </h1>
         </div>
       </div>

@@ -6,16 +6,16 @@ import ModifyCustomCustomText from "@/components/ModifyCustomText/ModifyCustomCu
 import HomePageProduct from "../HomepageProduct/page";
 
 const HomePage = () => {
-  return (
-    <div>
-     <HomePageProduct/>
-      <HomeCard />
-      <DogtagPreview />
-      <ModifyCustomCustomText />
-      <FontType />
-      <ColorPicker />
-    </div>
-  );
+     return (
+          <div>
+               <HomePageProduct />
+               <HomeCard />
+               <DogtagPreview />
+               <ModifyCustomCustomText />
+               <FontType />
+               <ColorPicker />
+          </div>
+     );
 };
 
 export default HomePage;

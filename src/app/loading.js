@@ -3,9 +3,9 @@ import { CircleLoader } from 'react-spinners'
 
 const loading = () => {
   return (
-    <div>
+    <div className=' flex justify-center items-center text-white'>
 
-        <CircleLoader></CircleLoader>
+        <CircleLoader color='#ffff'></CircleLoader>
       
     </div>
   )

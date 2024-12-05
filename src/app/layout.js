@@ -5,6 +5,7 @@ import Footer from "@/components/shared/Footer";
 import { FormProvider } from "@/components/context/FormContext";
 import ProgressBar from "@/components/shared/Progressber";
 import ScrollToTop from "@/components/shared/ScrollTopButton";
+import { ProductProvider } from "@/components/context/ProductContext";
 
 
 const geistSans = localFont({
@@ -36,10 +37,12 @@ export default function RootLayout({ children }) {
         <Hero />
 
         {/* Form Context Provider */}
+        <ProductProvider>
         <FormProvider>
           {children}
         </FormProvider>
         <ScrollToTop/>
+        </ProductProvider>
 
         {/* Footer */}
         <Footer />

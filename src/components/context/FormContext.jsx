@@ -1,24 +1,23 @@
-
 "use client";
-import { createContext, useContext, useState } from "react";
+import {createContext, useContext, useState} from "react";
 
 const FormContext = createContext();
 
-export const FormProvider = ({ children }) => {
-  const [formData, setFormData] = useState({ form1: {}, form2: {} });
+export const FormProvider = ({children}) => {
+     const [formData, setFormData] = useState({form1: {}, form2: {}});
 
-  const saveFormData = (formName, data) => {
-    setFormData((prev) => ({
-      ...prev,
-      [formName]: data,
-    }));
-  };
+     const saveFormData = (formName, data) => {
+          setFormData((prev) => ({
+               ...prev,
+               [formName]: data,
+          }));
+     };
 
-  return (
-    <FormContext.Provider value={{ formData, saveFormData }}>
-      {children}
-    </FormContext.Provider>
-  );
+     return (
+          <FormContext.Provider value={{formData, saveFormData}}>
+               {children}
+          </FormContext.Provider>
+     );
 };
 
 export const useFormContext = () => useContext(FormContext);
