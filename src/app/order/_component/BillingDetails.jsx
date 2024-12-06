@@ -1,6 +1,6 @@
 "use client";
 
-import {useProduct} from "@/components/context/ProductContext";
+import {useProducts} from "@/components/context/ProductContext";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import Image from "next/image";
@@ -8,7 +8,12 @@ import React from "react";
 import {useForm} from "react-hook-form";
 
 const BillingDetails = () => {
-     const {product} = useProduct();
+     const {products} = useProducts();
+     console.log("product from context", products);
+
+     // Product details extract
+     const productDetails = products?.[0];
+
      const {
           register,
           handleSubmit,
@@ -18,18 +23,25 @@ const BillingDetails = () => {
      const onSubmit = (data) => {
           const billingDetails = {
                ...data,
-               productName: product.name,
-               productQuantity: product.quantity,
-               totalPrice: product.price * product.quantity,
+               productName: productDetails?.name,
+               productQuantity: productDetails?.quantity || 1,
+               totalPrice:
+                    productDetails?.price * (productDetails?.quantity || 1),
           };
 
           console.log("Billing Details Submitted:", billingDetails);
           alert("Payment successful! Billing details submitted.");
      };
 
-     if (!product) {
-          return <p>Loading product details...</p>;
+     if (!productDetails) {
+          return <p>Loading Billing details...</p>;
      }
+
+     const subtotal = productDetails?.price*(productDetails?.quantity || 1);
+
+     console.log("quantity", productDetails?.quantity);
+
+     const total = subtotal; // Include shipping or other charges if necessary
 
      return (
           <div className="p-8 grid grid-cols-2 gap-16 w-full max-w-[60%] mx-auto">
@@ -54,7 +66,6 @@ const BillingDetails = () => {
                                    </span>
                               )}
                          </div>
-
                          <div>
                               <label className="block mb-1">
                                    Street Address
@@ -72,7 +83,6 @@ const BillingDetails = () => {
                                    </span>
                               )}
                          </div>
-
                          <div>
                               <label className="block mb-1">Town/City</label>
                               <Input
@@ -88,7 +98,6 @@ const BillingDetails = () => {
                                    </span>
                               )}
                          </div>
-
                          <div>
                               <label className="block mb-1">Postal Code</label>
                               <Input
@@ -104,7 +113,6 @@ const BillingDetails = () => {
                                    </span>
                               )}
                          </div>
-
                          <div>
                               <label className="block mb-1">Phone Number</label>
                               <Input
@@ -120,7 +128,6 @@ const BillingDetails = () => {
                                    </span>
                               )}
                          </div>
-
                          <div>
                               <label className="block mb-1">
                                    Email Address
@@ -139,7 +146,6 @@ const BillingDetails = () => {
                                    </span>
                               )}
                          </div>
-
                          <Button
                               type="submit"
                               className="w-full bg-black text-white py-2 rounded hover:bg-gray-800">
@@ -148,36 +154,39 @@ const BillingDetails = () => {
                     </form>
                </div>
 
-               {/* Left Section: Billing Details */}
-               <div className=" mt-24">
-                    <div className=" flex gap-5">
+               {/* Left Section: Product Details */}
+               <div className="mt-24">
+                    <div className="flex gap-5">
                          <Image
-                              src={product.image}
+                              src={
+                                   productDetails?.images?.[0] ||
+                                   "/public/card1.png"
+                              }
                               alt="product img"
                               className="w-40 rounded-md"
                               width={1200}
                               height={1200}
                          />
                          <p className="mt-4">
-                              <strong>Product:</strong> {product.name}
+                              <strong>Product:</strong> {productDetails?.name}
                          </p>
                     </div>
 
-                    <div className=" flex justify-between items-center">
+                    <div className="flex justify-between items-center">
                          <h1>Subtotal :</h1>
-                         <h2>${product.price * product.quantity}</h2>
+                         <h2>${subtotal}</h2>
                     </div>
                     <hr />
-                    
-                    <div className=" flex justify-between items-center">
+
+                    <div className="flex justify-between items-center">
                          <h1>Shipping :</h1>
                          <h2>Free</h2>
                     </div>
                     <hr />
 
-                    <div className=" flex justify-between items-center">
+                    <div className="flex justify-between items-center">
                          <h1>Total :</h1>
-                         <p>${product.price * product.quantity}</p>
+                         <p>${total}</p>
                     </div>
                </div>
           </div>

@@ -6,6 +6,7 @@ import { FormProvider } from "@/components/context/FormContext";
 import ProgressBar from "@/components/shared/Progressber";
 import ScrollToTop from "@/components/shared/ScrollTopButton";
 import { ProductProvider } from "@/components/context/ProductContext";
+import { Toaster } from "sonner";
 
 
 const geistSans = localFont({
@@ -39,6 +40,7 @@ export default function RootLayout({ children }) {
         {/* Form Context Provider */}
         <ProductProvider>
         <FormProvider>
+        <Toaster position="top-center" />
           {children}
         </FormProvider>
         <ScrollToTop/>

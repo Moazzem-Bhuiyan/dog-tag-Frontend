@@ -3,10 +3,10 @@ import Link from "next/link";
 
 const ProductCard = ({product}) => {
      return (
-          <div className=" w-[350px]  p-4 rounded">
-               <Link href={`/ProductDetails/${product.id}`}>
+          <div className="w-[350px] p-4 rounded">
+               <Link href={`/ProductDetails/${product._id}`}>
                     <Image
-                         src={product.image}
+                         src={product.images[0]?.url || "/placeholder.png"}
                          alt="Product img"
                          className="w-full h-auto object-cover rounded-md"
                          width={1200}
