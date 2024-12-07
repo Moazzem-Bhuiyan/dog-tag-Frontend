@@ -154,6 +154,7 @@ const BillingDetails = () => {
                     </form>
                </div>
 
+
                {/* Left Section: Product Details */}
                <div className="mt-24">
                     <div className="flex gap-5">

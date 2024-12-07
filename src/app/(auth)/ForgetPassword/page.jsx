@@ -1,63 +1,77 @@
-"use client"
-import React from "react";
-import { Modal } from "antd";
-import { Button } from "@/components/ui/button";
+"use client";
+import React, {useState} from "react";
+import {Modal} from "antd";
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
+import {useForm} from "react-hook-form";
+import axios from "axios";
 
-import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
+const ForgetPasswordModal = ({isOpen, onClose, onpenVerifyCodeclick}) => {
+     const [loading, setLoading] = useState(false);
+     const {
+          register,
+          handleSubmit,
+          formState: {errors},
+     } = useForm();
 
-const ForgetPasswordModal = ({ isOpen, onClose,onpenVerifyCodeclick }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+     const onSubmit = async (data) => {
+          setLoading(true);
 
-  const onSubmit = (data) => {
-    console.log("ForgetPass:", data);
-    // onClose(); // Close modal after successful login
-  };
+          try {
+               const response = await axios.patch(
+                    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/forgot-password`,
+                    {email: data.email},
+               );
 
-  return (
-    <Modal
-      centered
-      open={isOpen}
-      onCancel={onClose}
-      footer={null} 
-    >
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-4 py-10"
-      >
-        <div>
-          <label htmlFor="email" className="block text-white">
-            Email
-          </label>
-          <Input
-            id="email"
-            {...register("email", { required: "Email is required" })}
-            className="border p-2 w-full"
-          />
-          {errors.email && (
-            <p className="text-red-500">{errors.email.message}</p>
-          )}
-        </div>
+               if (response.data.success) {
+                localStorage.setItem('forgot-token', response.data.data.token)
+                    onpenVerifyCodeclick();
+                    console.log("OTP Sent:", response.data.message);
+               } else {
+                    console.error("Error sending OTP:", response.data.message);
+               }
+          } catch (error) {
+               console.error("Error occurred:", error);
+          } finally {
+               setLoading(false);
+          }
+     };
 
-        <Button
-        onClick={onpenVerifyCodeclick}
-          type="submit"
-          className="relative group px-6 py-3 font-medium text-black bg-black overflow-hidden mt-5"
-        >
-          <span className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 transform origin-top-left group-hover:origin-top-left transition-transform duration-1000 ease-in-out"></span>
-          <span className="z-50 relative text-white group-hover:text-black transition-colors duration-1000 ease-in-out">
-            Send Code
-          </span>
-        </Button>
-      </form>
+     return (
+          <Modal centered open={isOpen} onCancel={onClose} footer={null}>
+               <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="flex flex-col gap-4 py-10">
+                    <div>
+                         <label htmlFor="email" className="block text-white">
+                              Email
+                         </label>
+                         <Input
+                              id="email"
+                              {...register("email", {
+                                   required: "Email is required",
+                              })}
+                              className="border p-2 w-full"
+                         />
+                         {errors.email && (
+                              <p className="text-red-500">
+                                   {errors.email.message}
+                              </p>
+                         )}
+                    </div>
 
-
-    </Modal>
-  );
+                    <Button
+                         type="submit"
+                         className="relative group px-6 py-3 font-medium text-black bg-black overflow-hidden mt-5"
+                         disabled={loading}>
+                         <span className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 transform origin-top-left group-hover:origin-top-left transition-transform duration-1000 ease-in-out"></span>
+                         <span className="z-50 relative text-white group-hover:text-black transition-colors duration-1000 ease-in-out">
+                              {loading ? "Sending..." : "Send Code"}
+                         </span>
+                    </Button>
+               </form>
+          </Modal>
+     );
 };
 
 export default ForgetPasswordModal;
