@@ -3,7 +3,6 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import axios from "axios";
 
-
 const ProductContext = createContext();
 
 // Provider component
@@ -37,7 +36,6 @@ export const ProductProvider = ({children}) => {
      );
 };
 
-// Custom hook for consuming context
 export const useProducts = () => {
      return useContext(ProductContext);
 };

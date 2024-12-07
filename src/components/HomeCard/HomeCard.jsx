@@ -4,8 +4,6 @@ import Card2 from "/public/card2.png";
 import Card3 from "/public/card3.png";
 
 const HomeCard = () => {
-
-
      const card = [
           {
                img: Card1,
@@ -26,7 +24,6 @@ const HomeCard = () => {
                     "Complete your purchase. We’ll take care of the rest and get your custom creation to you as quickly as possible!",
           },
      ];
-
 
      return (
           <div>
@@ -49,7 +46,7 @@ const HomeCard = () => {
                     </p>
                </div>
 
-               <div className=" grid grid-cols-3 gap-10 justify-center items-center w-full max-w-[80%]  mx-auto mt-20 ">
+               <div className=" grid xl:grid-cols-3 lg:grid-cols-2 gap-10 justify-center items-center w-full max-w-[80%]  mx-auto mt-20 ">
                     {card.map((card, index) => (
                          <div
                               className=" bg-main p-12 px-12 space-y-5 rounded-md max-w-sm mx-auto h-auto shadow-none transition-shadow duration-300 cursor-pointer hover:shadow-lg hover:shadow-white "

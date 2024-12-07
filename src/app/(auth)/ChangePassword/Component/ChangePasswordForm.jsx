@@ -47,7 +47,7 @@ const ChangePasswordForm = () => {
             }
         } catch (error) {
             setErrorMessage(
-                error.response?.data?.message || "An error occurred. Please try again."
+                error.response?.data?.message || "An error occurred. Please try again.."
             );
         } finally {
             setLoading(false);
