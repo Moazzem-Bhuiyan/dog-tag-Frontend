@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import ChangePasswordForm from "../(auth)/ChangePassword/Component/ChangePasswordForm";
 import {ListOrdered, LogOut, Settings} from "lucide-react";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 const Profile = () => {
      const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,6 +19,7 @@ const Profile = () => {
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
           setIsLoggedIn(false);
+          redirect("/")
      };
 
      return (

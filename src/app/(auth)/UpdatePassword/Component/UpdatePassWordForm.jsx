@@ -1,21 +1,27 @@
 "use client";
-import React, {useState} from "react";
-import {Modal} from "antd";
-import {Button} from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
-import {useForm} from "react-hook-form";
+import React, { useState, useEffect } from "react";
+import { Modal } from "antd";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
 import axios from "axios";
 
-const UpdatePasswordForm = ({isOpen, onClose, onpenVerifyCodeclick}) => {
+const UpdatePasswordForm = ({ isOpen, onClose, onpenVerifyCodeclick }) => {
      const [loading, setLoading] = useState(false);
      const [errorMessage, setErrorMessage] = useState("");
+     const [token, setToken] = useState(""); // State to store the token
+
      const {
           register,
           handleSubmit,
-          formState: {errors},
+          formState: { errors },
      } = useForm();
 
-     const token = localStorage.getItem("reset-token");
+     // Safely access `localStorage` on the client
+     useEffect(() => {
+          const storedToken = localStorage.getItem("reset-token");
+          setToken(storedToken || "");
+     }, []);
 
      const onSubmit = async (data) => {
           setLoading(true);
@@ -36,7 +42,7 @@ const UpdatePasswordForm = ({isOpen, onClose, onpenVerifyCodeclick}) => {
                     },
                     {
                          headers: {
-                              token: token,
+                              token: token, // Use the token state
                          },
                     },
                );

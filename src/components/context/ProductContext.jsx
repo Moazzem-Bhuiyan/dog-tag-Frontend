@@ -3,13 +3,16 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import axios from "axios";
 
-const ProductContext = createContext();
+ export const ProductContext = createContext();
 
 // Provider component
 export const ProductProvider = ({children}) => {
      const [products, setProducts] = useState([]);
      const [loading, setLoading] = useState(true);
      const [error, setError] = useState(null);
+     const [cardProducts, setCardProducts] = useState();
+
+     console.log("cardProducts...", cardProducts);
 
      useEffect(() => {
           const fetchProducts = async () => {
@@ -20,7 +23,7 @@ export const ProductProvider = ({children}) => {
                     setProducts(response.data.data.data);
                     setLoading(false);
                } catch (err) {
-                    setError("Failed to fetch products.");
+                    setError("Server error: " + err);
                     setLoading(false);
                }
           };
@@ -30,12 +33,24 @@ export const ProductProvider = ({children}) => {
 
      return (
           <ProductContext.Provider
-               value={{products, loading, error, setProducts}}>
+               value={{
+                    products,
+                    loading,
+                    error,
+                    setProducts,
+                    cardProducts,
+                    setCardProducts,
+               }}>
                {children}
           </ProductContext.Provider>
      );
 };
 
+
+
 export const useProducts = () => {
+    
      return useContext(ProductContext);
 };
+
+

@@ -1,44 +1,28 @@
+"use client";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation"; // Import the useRouter hook
+import LoginPage from "./component/LoginForm";
 
-// "use client"
+const Page = () => {
+    const [isLoginOpen, setIsLoginOpen] = useState(false);
+    const router = useRouter(); // Initialize the router
 
-// import Navber from "@/components/shared/Navber";
-// import React, { useState } from "react";
-// import LoginPage from "./component/LoginForm";
+    useEffect(() => {
+        setIsLoginOpen(true);
+    }, []);
 
+    const handleCloseAll = () => {
+        setIsLoginOpen(false);
 
-// const App = () => {
-//   const [isModalOpen, setIsModalOpen] = useState(false);
+        // Navigate back to the previous location
+        router.back();
+    };
 
-//   const handleOpenModal = () => {
-//     setIsModalOpen(true);
-//   };
+    return (
+        <div>
+            <LoginPage isOpen={isLoginOpen} onClose={handleCloseAll} />
+        </div>
+    );
+};
 
-//   const handleCloseModal = () => {
-//     setIsModalOpen(false);
-//   };
-
-//   return (
-//     <div>
-//       {/* Pass the modal handler as a prop */}
-//       <Navber onLoginClick={handleOpenModal} />
-//       <LoginPage isOpen={isModalOpen} onClose={handleCloseModal} />
-//     </div>
-//   );
-// };
-
-// export default App;
-
-import React from 'react'
-import LoginPage from './component/LoginForm'
-
-const page = () => {
-  return (
-    <div>
-        <LoginPage/>
-      
-    </div>
-  )
-}
-
-export default page
-
+export default Page;

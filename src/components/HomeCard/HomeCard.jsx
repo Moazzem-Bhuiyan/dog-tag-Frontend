@@ -27,12 +27,12 @@ const HomeCard = () => {
 
      return (
           <div>
-               <div className=" w-full max-w-[50%] mx-auto space-y-5 mt-10">
-                    <h1 className="  text-3xl font-bold">
+               <div className=" w-full md:max-w-[50%] mx-auto md:space-y-5 mt-10">
+                    <h1 className=" text-xl md:text-3xl font-bold">
                          Custom Creations as Unique as You Are!
                     </h1>
 
-                    <p>
+                    <p className=" p-10 text-center">
                          At United Tags, we specialize in custom military dog
                          tags and laser-engraved items, offering a personal
                          touch for your everyday essentials or special gifts.

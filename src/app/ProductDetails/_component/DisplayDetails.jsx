@@ -1,15 +1,22 @@
 "use client";
 
-import {useProducts} from "@/components/context/ProductContext";
+
+import { useProducts } from "@/components/context/ProductContext";
 import {Button} from "@/components/ui/button";
 import Image from "next/image";
 import {useRouter} from "next/navigation";
 import {useState} from "react";
 
 const ProductDetails = ({product}) => {
+
+
      console.log("single product details", product);
+     
+
      const [quantity, setQuantity] = useState(1);
-     const {setProducts} = useProducts();
+     // const {setProducts} = useProducts();
+
+   const {setCardProducts} = useProducts()
      const router = useRouter();
 
      const productDetails = product?.data;
@@ -26,16 +33,28 @@ const ProductDetails = ({product}) => {
      };
 
      const handleBuyNow = () => {
-          setProducts({
+
+          console.log("Setting card products with:", {
                name: productDetails.name,
                price: productDetails.price,
                quantity,
-               image: productDetails.image,
+               image: productDetails.images[0]?.url || "default-image-url",
+
+               // why here image is not available?
+           });
+
+          setCardProducts({
+               name: productDetails.name,
+               price: productDetails.price,
+               quantity,
+               image: productDetails.images[0]?.url || "default-image-url",
           });
 
           router.push("/order");
-          router.refresh();
+        
      };
+
+     const domain = process.env.NEXT_PUBLIC_IMAGE_DOMAIN;
 
      return (
           <div className="p-8">
@@ -43,7 +62,7 @@ const ProductDetails = ({product}) => {
                     {/* Left Section - Product Image */}
                     <div>
                          <Image
-                              src={productDetails.images[0].url}
+                              src={domain+productDetails.images[0].url}
                               alt={productDetails.name}
                               className="w-[80%] m-auto object-cover rounded-md mb-4"
                               width={1200}
@@ -102,3 +121,7 @@ const ProductDetails = ({product}) => {
 };
 
 export default ProductDetails;
+
+
+
+

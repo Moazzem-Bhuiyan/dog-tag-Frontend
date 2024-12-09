@@ -4,7 +4,7 @@ import OtpVerificationModal from './_COmponent/OtpForm';
 const page = () => {
     return (
         <div>
-            <OtpVerificationModal></OtpVerificationModal>
+            <OtpVerificationModal/>
         </div>
     );
 };

@@ -3,7 +3,7 @@ import Link from "next/link";
 import {useEffect, useState} from "react";
 
 const Navber = ({onLoginClick}) => {
-     
+
      const [isLoggedIn, setIsLoggedIn] = useState(false);
 
      useEffect(() => {
@@ -22,11 +22,11 @@ const Navber = ({onLoginClick}) => {
           {title: "Home", link: "/"},
           {title: "Gifts", link: "#"},
           {title: "Services", link: "#"},
-          {title: "Contact", link: "/ChangePassword"},
+          {title: "Contact", link: "#"},
      ];
 
      return (
-          <div className="flex flex-col md:flex-row justify-center items-center md:gap-10 lg:gap-40 w-full p-4">
+          <div className="md:flex flex-col md:flex-row justify-center items-center md:gap-10 lg:gap-40 w-full p-4 hidden">
                {/* Navigation Links */}
                {Navlink.map((item, index) => (
                     <div key={index} className="relative mb-2 md:mb-0 group">

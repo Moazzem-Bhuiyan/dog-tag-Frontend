@@ -18,12 +18,12 @@ const ModifyCustomCustomText = () => {
           <div>
                <CustomHeadline title="Modify Custom Text" />
 
-               <div className="grid lg:grid-cols-2 gap-20 justify-center items-center w-full lg:max-w-[50%] mx-auto">
+               <div className=" md:grid lg:grid-cols-2 gap-20 justify-center items-center w-full lg:max-w-[50%] mx-auto ">
                     <DogTagone onChange={(data) => setForm1Data(data)} />
                     <DogtagTwo onChange={(data) => setForm2Data(data)} />
                </div>
 
-               <div className=" flex justify-center">
+               <div className=" flex justify-center p-2">
                     <Button
                          onClick={handleGlobalSubmit}
                          className=" bg-main text-center text-2xl w-full lg:max-w-[30%] mx-auto my-20 py-6 border border-white">

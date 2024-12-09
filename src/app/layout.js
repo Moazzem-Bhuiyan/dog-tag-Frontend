@@ -33,12 +33,12 @@ export default function RootLayout({ children }) {
       >
         {/* Include the ProgressBar */}
         <ProgressBar />
-
+        <ProductProvider>
         {/* Hero Section */}
         <Hero />
 
         {/* Form Context Provider */}
-        <ProductProvider>
+      
         <FormProvider>
         <Toaster position="top-center" />
           {children}

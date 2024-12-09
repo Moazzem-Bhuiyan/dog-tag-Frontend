@@ -131,7 +131,7 @@ const LoginPage = ({isOpen, onClose, onSignupClick, onForgetPasswordClick}) => {
                     onClick={onSignupClick}
                     className="text-center w-full mt-4 text-white"
                     variant="link">
-                    Don't have an account?{" "}
+                    Don&apos;t have an account?{" "}
                     <span className="text-red-500">Register</span>
                </Button>
           </Modal>
@@ -139,3 +139,4 @@ const LoginPage = ({isOpen, onClose, onSignupClick, onForgetPasswordClick}) => {
 };
 
 export default LoginPage;
+

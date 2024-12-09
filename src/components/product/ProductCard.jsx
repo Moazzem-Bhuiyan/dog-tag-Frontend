@@ -2,11 +2,18 @@ import Image from "next/image";
 import Link from "next/link";
 
 const ProductCard = ({product}) => {
+     const domain = process.env.NEXT_PUBLIC_IMAGE_DOMAIN;
+
+     // console.log("domain", domain)
+
      return (
-          <div className="w-[350px] p-4 rounded">
+          <div className=" md:w-[350px] p-4 rounded border">
                <Link href={`/ProductDetails/${product._id}`}>
                     <Image
-                         src={product.images[0]?.url || "/placeholder.png"}
+                         src={
+                              domain + product.images[0]?.url ||
+                              "/placeholder.png"
+                         }
                          alt="Product img"
                          className="w-full h-auto object-cover rounded-md"
                          width={1200}

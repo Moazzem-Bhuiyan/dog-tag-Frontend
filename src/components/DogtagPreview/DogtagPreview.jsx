@@ -16,8 +16,6 @@ const DogtagPreview = () => {
           ));
      };
 
-     // make image sections
-
      const handleDownload = async (divId) => {
           const element = document.getElementById(divId);
           if (element) {
@@ -33,12 +31,12 @@ const DogtagPreview = () => {
           <div>
                <CustomHeadline title="My Dog Tag" />
 
-               <div className="lg:grid lg:grid-cols-2 gap-20 justify-center items-center w-full lg:max-w-[50%] mx-auto sm:space-y-30">
+               <div className="  md:grid lg:grid-cols-2 gap-20 justify-center items-center w-full lg:max-w-[50%] mx-auto p-10 md:p-0">
                     {/* div 1 */}
                     <div
                          id="dogtag-1"
                          className="relative w-full h-52 bg-cover bg-center"
-                         style={{backgroundImage: "url('/plate.png')"}}> 
+                         style={{backgroundImage: "url('/plate.png')"}}>
                          <div className="absolute ml-40 mt-8">
                               <h1 className="text-3d uppercase text-center font-bold text-black">
                                    {renderFormData(formData.form1)}
@@ -56,7 +54,7 @@ const DogtagPreview = () => {
                     {/* div 2 */}
                     <div
                          id="dogtag-2"
-                         className="relative w-full h-52 bg-cover bg-center"
+                         className="relative w-full h-52 bg-cover bg-center "
                          style={{backgroundImage: "url('/plate.png')"}}>
                          <div className="absolute ml-40 mt-8">
                               <h1 className="text-3d uppercase text-center font-bold text-black">

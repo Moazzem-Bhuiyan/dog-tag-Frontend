@@ -9,6 +9,7 @@ import RegisterModal from "@/app/(auth)/Register/Component/RegisterForm";
 import ForgetPasswordModal from "@/app/(auth)/ForgetPassword/page";
 import VerifyModal from "@/app/(auth)/VerifyCode/page";
 import UpdatePasswordForm from "@/app/(auth)/UpdatePassword/Component/UpdatePasswordForm";
+import Link from "next/link";
 
 const Hero = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -55,7 +56,7 @@ const Hero = () => {
     <div className="bg-main h-[60vh] flex justify-center items-center">
       <div className="relative w-full">
         <div className="flex justify-center items-center">
-          <Image src={hero} alt="hero img" />
+         <Link href="/" > <Image src={hero} alt="hero img" /> </Link>
         </div>
 
         <div className="mt-32">
