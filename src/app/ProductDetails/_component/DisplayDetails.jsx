@@ -10,7 +10,7 @@ import {useState} from "react";
 const ProductDetails = ({product}) => {
 
 
-     console.log("single product details", product);
+     // console.log("single product details", product);
      
 
      const [quantity, setQuantity] = useState(1);
@@ -45,6 +45,7 @@ const ProductDetails = ({product}) => {
 
           setCardProducts({
                name: productDetails.name,
+               id: productDetails._id,
                price: productDetails.price,
                quantity,
                image: productDetails.images[0]?.url || "default-image-url",

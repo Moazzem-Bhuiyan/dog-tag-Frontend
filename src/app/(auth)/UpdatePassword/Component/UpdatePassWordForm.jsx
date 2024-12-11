@@ -1,12 +1,13 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { Modal } from "antd";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
+import React, {useState, useEffect} from "react";
+import {Modal} from "antd";
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
+import {useForm} from "react-hook-form";
 import axios from "axios";
+import { toast } from "sonner";
 
-const UpdatePasswordForm = ({ isOpen, onClose, onpenVerifyCodeclick }) => {
+const UpdatePasswordForm = ({isOpen, onClose, onpenVerifyCodeclick}) => {
      const [loading, setLoading] = useState(false);
      const [errorMessage, setErrorMessage] = useState("");
      const [token, setToken] = useState(""); // State to store the token
@@ -14,7 +15,7 @@ const UpdatePasswordForm = ({ isOpen, onClose, onpenVerifyCodeclick }) => {
      const {
           register,
           handleSubmit,
-          formState: { errors },
+          formState: {errors},
      } = useForm();
 
      // Safely access `localStorage` on the client
@@ -51,6 +52,8 @@ const UpdatePasswordForm = ({ isOpen, onClose, onpenVerifyCodeclick }) => {
 
                if (response.data.success) {
                     alert("Password updated successfully!");
+
+                    toast.success("Password updated successfully!");
                     onClose(); // Close the modal
                } else {
                     setErrorMessage(

@@ -12,6 +12,7 @@ import {
      FormMessage,
 } from "@/components/ui/form";
 import {InputOTP, InputOTPGroup, InputOTPSlot} from "@/components/ui/input-otp";
+import { toast } from "sonner";
 
 export function VerifyCodeForm({OnupdatePassClick}) {
      const form = useForm({
@@ -59,11 +60,13 @@ export function VerifyCodeForm({OnupdatePassClick}) {
                .catch((error) => {
                     console.error("Error during API call:", error);
                     if (error.response) {
-                         // Handle error response from API
-                         alert(
-                              error.response.data.message ||
-                                   "An error occurred.",
-                         );
+                        
+                         // alert(
+                         //      error.response.data.message ||
+                         //           "An error occurred.",
+                         // );
+
+                         toast.error(error.response.data.message || "An error occurred")
                     } else {
                          alert("An error occurred. Please try again.");
                     }
@@ -82,7 +85,7 @@ export function VerifyCodeForm({OnupdatePassClick}) {
                               <FormItem>
                                    <FormControl>
                                         <InputOTP maxLength={6} {...field}>
-                                             <InputOTPGroup>
+                                             <InputOTPGroup className="text-white">
                                                   <InputOTPSlot index={0} />
                                                   <InputOTPSlot index={1} />
                                                   <InputOTPSlot index={2} />

@@ -26,7 +26,7 @@ const HomePageProduct = () => {
                          </button>
                     </Link>
                </div>
-               <div className="w-full max-w-[60%] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-20">
+               <div className="w-full lg:max-w-[60%] lg:mx-auto grid  grid-cols-2  lg:grid-cols-2 2xl:grid-cols-3 gap-20">
                     {featuredProducts.length > 0 ? (
                          featuredProducts.map((product) => (
                               <ProductCard key={product._id} product={product} />

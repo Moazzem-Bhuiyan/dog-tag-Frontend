@@ -8,54 +8,52 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {loginUser} from "@/Services/actions/loginUser";
 import {toast} from "sonner";
+import { useLogin } from "@/components/context/LoginContext";
+
 
 const LoginPage = ({isOpen, onClose, onSignupClick, onForgetPasswordClick}) => {
-     const {
-          register,
-          handleSubmit,
-          reset,
-          formState: {errors},
-     } = useForm();
+     const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const { login } = useLogin(); // Get login function from context
+  const router = useRouter();
+  const [loading, setLoading] = React.useState(false);
 
-     const [loading, setLoading] = React.useState(false);
-     const router = useRouter();
+  const onSubmit = async (values) => {
+    setLoading(true);
 
-     const onSubmit = async (values) => {
-          setLoading(true);
+    try {
+      const res = await loginUser(values);  // Assuming this is your API call
 
-          try {
-               const res = await loginUser(values);
+      const { accessToken, refreshToken, user } = res.data;
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
 
-               const {accessToken, refreshToken, user} = res.data;
+      // Call login from context to update state
+      login(accessToken);
 
-               localStorage.setItem("accessToken", accessToken);
-               localStorage.setItem("refreshToken", refreshToken);
+      toast.success(`Welcome back, ${user.name}!`);
 
-               toast.success(`Welcome back, ${user.name}!`);
-
-               router.push("/");
-               router.refresh();
-
-               onClose();
-          } catch (error) {
-               message.error(error.response?.data?.message || "Login failed!");
-          } finally {
-               setLoading(false);
-               reset();
-          }
-     };
+      // Redirect to the homepage
+      router.push('/');
+      onClose();
+    } catch (error) {
+      toast.error('Login failed!');
+    } finally {
+      setLoading(false);
+      reset();
+    }
+  };
 
      return (
           <Modal centered open={isOpen} onCancel={onClose} footer={null}>
                <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col gap-4 py-10">
-                    <h1 className="text-center text-2xl font-bold">
+                    <h1 className="text-center text-2xl font-bold text-white">
                          Welcome Back
                     </h1>
 
                     <div>
-                         <label htmlFor="email" className="block text-gray-700">
+                         <label htmlFor="email" className="block text-white">
                               Email
                          </label>
                          <Input
@@ -79,9 +77,7 @@ const LoginPage = ({isOpen, onClose, onSignupClick, onForgetPasswordClick}) => {
                     </div>
 
                     <div>
-                         <label
-                              htmlFor="password"
-                              className="block text-gray-700">
+                         <label htmlFor="password" className="block text-white">
                               Password
                          </label>
                          <Input
@@ -109,7 +105,7 @@ const LoginPage = ({isOpen, onClose, onSignupClick, onForgetPasswordClick}) => {
                               <Checkbox />
                               <label
                                    htmlFor="rememberMe"
-                                   className="text-sm font-medium leading-none">
+                                   className="text-sm font-medium leading-none text-white">
                                    Remember me
                               </label>
                          </div>
@@ -139,4 +135,3 @@ const LoginPage = ({isOpen, onClose, onSignupClick, onForgetPasswordClick}) => {
 };
 
 export default LoginPage;
-

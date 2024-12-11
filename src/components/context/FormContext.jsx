@@ -15,7 +15,7 @@ export const FormProvider = ({children}) => {
 
      return (
           <FormContext.Provider value={{formData, saveFormData}}>
-               {children}
+               <div className="text-white">{children}</div>
           </FormContext.Provider>
      );
 };

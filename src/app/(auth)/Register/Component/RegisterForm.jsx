@@ -83,7 +83,7 @@ const RegisterModal = ({isOpen, onClose, onLoginClick}) => {
                     <form
                          onSubmit={handleSubmit(onSubmit)}
                          className="flex flex-col gap-4 py-10">
-                         <h1 className="text-center text-2xl font-bold">
+                         <h1 className="text-center text-2xl font-bold text-white">
                               Create an Account
                          </h1>
                          <div>

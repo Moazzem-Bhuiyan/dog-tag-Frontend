@@ -7,6 +7,7 @@ import ProgressBar from "@/components/shared/Progressber";
 import ScrollToTop from "@/components/shared/ScrollTopButton";
 import { ProductProvider } from "@/components/context/ProductContext";
 import { Toaster } from "sonner";
+import { LoginProvider } from "@/components/context/LoginContext";
 
 
 const geistSans = localFont({
@@ -31,23 +32,30 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* Include the ProgressBar */}
-        <ProgressBar />
-        <ProductProvider>
-        {/* Hero Section */}
-        <Hero />
+       <main className="text-white">
+          {/* Include the ProgressBar */}
+           <ProgressBar />
+      <LoginProvider> 
+          <ProductProvider>
+            {/* Hero Section */}
+             <Hero />
+           {/* Form Context Provider */}
+            <FormProvider>
+              
 
-        {/* Form Context Provider */}
-      
-        <FormProvider>
-        <Toaster position="top-center" />
-          {children}
-        </FormProvider>
-        <ScrollToTop/>
+              {children}
+              
+           </FormProvider>
+             <ScrollToTop/>
+
         </ProductProvider>
+        </LoginProvider>
 
-        {/* Footer */}
-        <Footer />
+           {/* Footer */}
+           <Footer />
+       </main>
+
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   );

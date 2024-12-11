@@ -4,11 +4,16 @@ import Link from "next/link";
 import {useEffect, useState} from "react";
 import ChangePasswordForm from "../(auth)/ChangePassword/Component/ChangePasswordForm";
 import {ListOrdered, LogOut, Settings} from "lucide-react";
-import Image from "next/image";
-import { redirect } from "next/navigation";
+
+import { useRouter} from "next/navigation";
+import { useLogin } from "@/components/context/LoginContext";
 
 const Profile = () => {
      const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+     const router = useRouter();
+
+     const {logout}=useLogin()
 
      useEffect(() => {
           const token = localStorage.getItem("accessToken");
@@ -16,24 +21,16 @@ const Profile = () => {
      }, []);
 
      const handleLogout = () => {
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
-          setIsLoggedIn(false);
-          redirect("/")
-     };
+          logout();
+          router.push('/');  // Redirect to home page after logout
+        };
+   
 
      return (
           <div className=" w-full max-w-[60%] m-auto grid grid-cols-4 gap-10 justify-center items-center">
                {/* sideber */}
 
                <div className=" space-y-6 col-span-1">
-                    <Image
-                         src="/user.png"
-                         width={1200}
-                         height={1200}
-                         alt="logo"
-                         className="w-24 h-24 rounded-full"
-                    />
                     <div>
                          <li className=" flex gap-2">
                               {" "}

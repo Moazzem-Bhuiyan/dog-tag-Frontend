@@ -3,16 +3,17 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import axios from "axios";
 
- export const ProductContext = createContext();
+export const ProductContext = createContext();
 
 // Provider component
 export const ProductProvider = ({children}) => {
      const [products, setProducts] = useState([]);
      const [loading, setLoading] = useState(true);
      const [error, setError] = useState(null);
+
      const [cardProducts, setCardProducts] = useState();
 
-     console.log("cardProducts...", cardProducts);
+  
 
      useEffect(() => {
           const fetchProducts = async () => {
@@ -29,6 +30,7 @@ export const ProductProvider = ({children}) => {
           };
 
           fetchProducts();
+
      }, []);
 
      return (
@@ -46,11 +48,6 @@ export const ProductProvider = ({children}) => {
      );
 };
 
-
-
 export const useProducts = () => {
-    
      return useContext(ProductContext);
 };
-
-

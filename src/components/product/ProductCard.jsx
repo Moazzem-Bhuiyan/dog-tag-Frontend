@@ -7,7 +7,7 @@ const ProductCard = ({product}) => {
      // console.log("domain", domain)
 
      return (
-          <div className=" md:w-[350px] p-4 rounded border">
+          <div className=" w-[200px] md:w-[250px] lg:w-[300px] mx-auto p-4 rounded border">
                <Link href={`/ProductDetails/${product._id}`}>
                     <Image
                          src={
@@ -15,7 +15,7 @@ const ProductCard = ({product}) => {
                               "/placeholder.png"
                          }
                          alt="Product img"
-                         className="w-full h-auto object-cover rounded-md"
+                         className="w-full h-[200px] object-cover rounded-md"
                          width={1200}
                          height={1200}
                     />

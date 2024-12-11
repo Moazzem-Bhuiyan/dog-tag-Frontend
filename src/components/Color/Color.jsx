@@ -21,7 +21,7 @@ const ColorPicker = () => {
                     {/* Black Color Option */}
                     <div
                          onClick={() => handleColorChange("black")}
-                         className={`relative flex flex-col items-center p-8 cursor-pointer rounded-md transition-all ${
+                         className={`relative flex flex-col items-center p-8 md:mt-5 cursor-pointer rounded-md transition-all ${
                               selectedColor === "black"
                                    ? "ring-4 ring-white"
                                    : ""
@@ -107,7 +107,7 @@ const ColorPicker = () => {
                     </div>
                </div>
 
-               <div className=" flex justify-center">
+               <div className=" flex justify-center p-5">
                     <Button className=" bg-main text-center text-2xl w-full md:max-w-[30%] mx-auto my-20 p-2 ">
                          Update Dog Tag
                     </Button>

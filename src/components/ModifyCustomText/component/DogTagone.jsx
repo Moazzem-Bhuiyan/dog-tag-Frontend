@@ -25,7 +25,7 @@ const DogTagone = ({onChange}) => {
      };
 
      return (
-          <div className="space-y-5 p-5 border rounded-lg">
+          <div className="space-y-5 p-5 border rounded-lg ">
                <h1 className="text-center text-2xl">Dog Tag 1</h1>
                <Input
                     name="input1"

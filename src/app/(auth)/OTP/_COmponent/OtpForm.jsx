@@ -3,6 +3,7 @@
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Modal} from "antd";
+import { redirect } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -20,7 +21,9 @@ const OtpVerificationModal = ({isOpen, otpToken, email, onSuccess}) => {
 
                if (res.success) {
                     toast.success(res.message || "OTP verified successfully!");
-                    onSuccess();
+
+                    redirect('/')
+                    // onSuccess();
                } else {
                     toast.error(res.message || "OTP verification failed.");
                }
@@ -39,7 +42,7 @@ const OtpVerificationModal = ({isOpen, otpToken, email, onSuccess}) => {
                <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col gap-4">
-                    <h1 className="text-center text-2xl font-bold">
+                    <h1 className="text-center text-2xl font-bold text-white">
                          Verify OTP
                     </h1>
                     <Input

@@ -6,19 +6,32 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import axios from "axios";
 
 import Image from "next/image";
-import React, {useContext} from "react";
+import {redirect} from "next/navigation";
+import React, {useContext, useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
+import {toast} from "sonner";
 
 const BillingDetails = () => {
      const {cardProducts} = useContext(ProductContext);
 
-     console.log("product from context", cardProducts);
-
      // Product details extract
 
      const productDetails = cardProducts;
+
+     const [selectTab, setSelectedTab] = useState("itemsTag");
+
+     const defaultorderType = "regular";
+     const orderType = selectTab;
+
+     useEffect(() => {
+          console.log("cardProduct from useEffect", cardProducts);
+          if (!cardProducts) {
+               redirect("/");
+          }
+     }, [cardProducts]);
 
      const {
           register: registerItemTags,
@@ -30,16 +43,150 @@ const BillingDetails = () => {
           register: registerMedicalTags,
           handleSubmit: handleSubmitMedicalTags,
           formState: {errors: errorsMedicalTags},
+          reset,
      } = useForm();
 
-     const onSubmitItemTags = (data) => {
-          // Handle submission for Item Tags form
-          console.log("Item Tags Submitted:", data);
+     const token = localStorage.getItem("accessToken");
+
+     // items tags submit button and backend logic here :
+
+     const onSubmitItemTags = async (data) => {
+          // validation and backend logic here :
+          const finalData = {...data, orderType};
+
+          const formDataWithProductId = {
+               billingDetails: finalData,
+
+               orderType: defaultorderType,
+               product: productDetails?.id,
+               quantity: productDetails?.quantity,
+               totalAmount: total,
+          };
+
+          const orderPaymentLoading = toast.loading("Order creating....");
+          // create order api......
+          try {
+               const res = await axios.post(
+                    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/orders`,
+                    formDataWithProductId,
+                    {
+                         headers: {
+                              Authorization: `Bearer ${token}`,
+                         },
+                    },
+               );
+
+               const orderId = await res.data?.data;
+
+               // Payment api....
+               try {
+                    const res = await axios.post(
+                         `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments/checkout`,
+                         {
+                              order: orderId,
+                         },
+                         {
+                              headers: {
+                                   Authorization: `Bearer ${token}`,
+                              },
+                         },
+                    );
+
+                    const paymentLink = await res?.data?.data;
+
+                    if (!paymentLink) {
+                         return toast.error("Payment failed", {
+                              id: orderPaymentLoading,
+                         });
+                    }
+
+                    toast.success("Order created successfully", {
+                         id: orderPaymentLoading,
+                    });
+
+                    // Redirection: redirect to payment page
+
+                    if (window !== undefined) {
+                         window.location.href = paymentLink;
+                    }
+               } catch (error) {
+                    console.error(error);
+               }
+          } catch (error) {
+               console.error("Error:", error);
+          }
      };
 
-     const onSubmitMedicalTags = (data) => {
-          // Handle submission for Medical Tags form
-          console.log("Medical Tags Submitted:", data);
+     // medicaltags submit button and backend logic
+
+     const onSubmitMedicalTags = async (data) => {
+          // validation and backend logic here :
+          const finalData = {...data, orderType};
+
+          const formDataWithProductId = {
+               billingDetails: finalData,
+
+               orderType: defaultorderType,
+               product: productDetails?.id,
+               quantity: productDetails?.quantity,
+               totalAmount: total,
+          };
+
+          // const orderPaymentLoading = toast.loading("Order creating....");
+          // create order api......
+          const orderPaymentLoading = toast.loading("Order creating....");
+          try {
+               const res = await axios.post(
+                    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/orders`,
+                    formDataWithProductId,
+                    {
+                         headers: {
+                              Authorization: `Bearer ${token}`,
+                         },
+                    },
+               );
+
+               const orderId = await res.data?.data;
+
+               // Payment api....
+               try {
+                    const res = await axios.post(
+                         `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments/checkout`,
+                         {
+                              order: orderId,
+                         },
+                         {
+                              headers: {
+                                   Authorization: `Bearer ${token}`,
+                              },
+                         },
+                    );
+
+                    const paymentLinkk = await res?.data?.data;
+
+                    if (!paymentLinkk) {
+                         return toast.error("Payment failed", {
+                              id: orderPaymentLoading,
+                         });
+                    }
+
+                    toast.success("Order created successfully", {
+                         id: orderPaymentLoading,
+                    });
+
+                    // Redirection: redirect to payment page
+
+                    if (window !== undefined) {
+                         window.location.href = paymentLinkk;
+                    }
+               } catch (error) {
+                    console.error(error);
+               }
+          } catch (error) {
+               console.error("Error:", error);
+          } finally {
+               reset();
+          }
      };
 
      if (!productDetails) {
@@ -55,107 +202,99 @@ const BillingDetails = () => {
      const domain = process.env.NEXT_PUBLIC_IMAGE_DOMAIN;
 
      return (
-          <div className="p-8 grid grid-cols-2 gap-16 w-full max-w-[60%] mx-auto">
+          <div className="p-8 grid grid-cols-1 xl:grid-cols-2  gap-16 w-full md:max-w-[60%] mx-auto">
                {/* Right Section: Billing Form */}
 
-               <Tabs defaultValue="itemstag" className="w-[400px]">
+               <Tabs
+                    defaultValue="itemsTag"
+                    value={selectTab}
+                    onValueChange={setSelectedTab}
+                    className="w-[400px] order-2 md:order-1">
                     <TabsList className="grid w-full grid-cols-2">
-                         <TabsTrigger value="itemstag">Item Tags</TabsTrigger>
-                         <TabsTrigger value="medical">
+                         <TabsTrigger value="itemsTag">Item Tags</TabsTrigger>
+                         <TabsTrigger value="medicalTag">
                               Medical Tags
                          </TabsTrigger>
                     </TabsList>
 
-                    <TabsContent value="itemstag">
+                    <TabsContent value="itemsTag">
                          <form
                               onSubmit={handleSubmitItemTags(onSubmitItemTags)}
                               className="space-y-4">
                               <div>
-                                   <label className="block mb-1">
-                                        First Name
-                                   </label>
+                                   <label className="block mb-1">Name</label>
                                    <Input
-                                        {...registerItemTags("firstName", {
-                                             required: "First Name is required",
+                                        {...registerItemTags("name", {
+                                             required: "Name is required",
                                         })}
                                         className="w-full p-2 border rounded"
-                                        placeholder="First Name"
+                                        placeholder="Name"
                                    />
-                                   {errorsItemTags.firstName && (
+                                   {errorsItemTags?.billingDetails?.name && (
                                         <span className="text-red-500 text-sm">
-                                             {errorsItemTags.firstName.message}
+                                             {errorsItemTags.name.message}
                                         </span>
                                    )}
                               </div>
-
                               <div>
-                                   <label className="block mb-1">Country</label>
+                                   <label className="block mb-1">Address</label>
                                    <Input
-                                        {...registerItemTags("country", {
-                                             required:
-                                                  "Country Name is required",
+                                        {...registerItemTags("address", {
+                                             required: "Address is required",
                                         })}
                                         className="w-full p-2 border rounded"
-                                        placeholder="Country Name"
+                                        placeholder="Address"
                                    />
-                                   {errorsItemTags.firstName && (
+                                   {errorsItemTags?.address && (
                                         <span className="text-red-500 text-sm">
-                                             {
-                                                  errorsItemTags.countryname
-                                                       .message
-                                             }
+                                             {errorsItemTags.address.message}
                                         </span>
                                    )}
                               </div>
-
-
-                              <div>
-                                   <label className="block mb-1">Country</label>
-                                   <Input
-                                   type="number"
-                                        {...registerItemTags("phonenumber", {
-                                             required:
-                                                  "Phone Number is required",
-                                        })}
-                                        className="w-full p-2 border rounded"
-                                        placeholder="Phone Number"
-                                   />
-                                   {errorsItemTags.firstName && (
-                                        <span className="text-red-500 text-sm">
-                                             {
-                                                  errorsItemTags.phonenumber
-                                                       .message
-                                             }
-                                        </span>
-                                   )}
-                              </div>
-
                               <div>
                                    <label className="block mb-1">Email</label>
                                    <Input
-                                   type="email"
                                         {...registerItemTags("email", {
-                                             required:
-                                                 " Email is required",
+                                             required: "Email is required",
+                                             pattern: {
+                                                  value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
+                                                  message: "Invalid email format",
+                                             },
                                         })}
                                         className="w-full p-2 border rounded"
                                         placeholder="Email"
                                    />
-                                   {errorsItemTags.firstName && (
+                                   {errorsItemTags?.email && (
+                                        <span className="text-red-500 text-sm">
+                                             {errorsItemTags.email.message}
+                                        </span>
+                                   )}
+                              </div>
+                              <div>
+                                   <label className="block mb-1">
+                                        Phone Number
+                                   </label>
+                                   <Input
+                                        {...registerItemTags("phoneNumber", {
+                                             required:
+                                                  "Phone number is required",
+                                             pattern: {
+                                                  value: /^[0-9]{10,15}$/,
+                                                  message: "Invalid phone number",
+                                             },
+                                        })}
+                                        className="w-full p-2 border rounded"
+                                        placeholder="Phone Number"
+                                   />
+                                   {errorsItemTags?.phoneNumber && (
                                         <span className="text-red-500 text-sm">
                                              {
-                                                  errorsItemTags.Email
+                                                  errorsItemTags.phoneNumber
                                                        .message
                                              }
                                         </span>
                                    )}
                               </div>
-
-                             
-                             
-
-                              {/* Other fields for Item Tags form... */}
-
                               <Button
                                    type="submit"
                                    className="w-full bg-black text-white py-2 rounded hover:bg-gray-800">
@@ -164,34 +303,209 @@ const BillingDetails = () => {
                          </form>
                     </TabsContent>
 
-                    <TabsContent value="medical">
+                    <TabsContent value="medicalTag">
                          <form
                               onSubmit={handleSubmitMedicalTags(
                                    onSubmitMedicalTags,
                               )}
                               className="space-y-4">
                               <div>
-                                   <label className="block mb-1">
-                                        First Name
-                                   </label>
+                                   <label className="block mb-1">Name</label>
                                    <Input
-                                        {...registerMedicalTags("firstName", {
-                                             required: "First Name is required",
+                                        {...registerMedicalTags("name", {
+                                             required: " Name is required",
                                         })}
                                         className="w-full p-2 border rounded"
-                                        placeholder="First Name"
+                                        placeholder=" Name"
                                    />
-                                   {errorsMedicalTags.firstName && (
+                                   {errorsMedicalTags.name && (
+                                        <span className="text-red-500 text-sm">
+                                             {errorsMedicalTags.name.message}
+                                        </span>
+                                   )}
+                              </div>
+                              <div>
+                                   <label className="block mb-1">Email</label>
+                                   <Input
+                                        {...registerMedicalTags("email", {
+                                             required: " email is required",
+                                        })}
+                                        className="w-full p-2 border rounded"
+                                        placeholder=" Email"
+                                   />
+                                   {errorsMedicalTags.email && (
+                                        <span className="text-red-500 text-sm">
+                                             {errorsMedicalTags.email.message}
+                                        </span>
+                                   )}
+                              </div>
+
+                              <div>
+                                   <label className="block mb-1">Address</label>
+                                   <Input
+                                        {...registerMedicalTags("address", {
+                                             required: " Address is required",
+                                        })}
+                                        className="w-full p-2 border rounded"
+                                        placeholder="Address"
+                                   />
+                                   {errorsMedicalTags.address && (
+                                        <span className="text-red-500 text-sm">
+                                             {errorsMedicalTags.address.message}
+                                        </span>
+                                   )}
+                              </div>
+                              <div>
+                                   <label className="block mb-1">
+                                        Date of Birth
+                                   </label>
+                                   <Input
+                                        {...registerMedicalTags("dob", {
+                                             required: " Address is required",
+                                        })}
+                                        className="w-full p-2 border rounded"
+                                        placeholder="Date of Birth"
+                                   />
+                                   {errorsMedicalTags.dob && (
+                                        <span className="text-red-500 text-sm">
+                                             {errorsMedicalTags.dob.message}
+                                        </span>
+                                   )}
+                              </div>
+
+                              <div>
+                                   <label className="block mb-1">
+                                        Emargency Contact
+                                   </label>
+                                   <Input
+                                        {...registerMedicalTags(
+                                             "emergencyContact",
+                                             {
+                                                  required:
+                                                       " Number is required",
+                                             },
+                                        )}
+                                        className="w-full p-2 border rounded"
+                                        placeholder="Emargency Contact"
+                                   />
+                                   {errorsMedicalTags.emergencyContact && (
                                         <span className="text-red-500 text-sm">
                                              {
-                                                  errorsMedicalTags.firstName
+                                                  errorsMedicalTags
+                                                       .emergencyContact.message
+                                             }
+                                        </span>
+                                   )}
+                              </div>
+                              <div>
+                                   <label className="block mb-1">
+                                        Emargency Contact
+                                   </label>
+                                   <Input
+                                        {...registerMedicalTags("phoneNumber", {
+                                             required: " Number is required",
+                                        })}
+                                        className="w-full p-2 border rounded"
+                                        placeholder="Phone Number"
+                                   />
+                                   {errorsMedicalTags.phoneNumber && (
+                                        <span className="text-red-500 text-sm">
+                                             {
+                                                  errorsMedicalTags.phoneNumber
                                                        .message
                                              }
                                         </span>
                                    )}
                               </div>
 
-                              {/* Other fields for Medical Tags form... */}
+                              <div>
+                                   <label className="block mb-1">
+                                        Blood Type
+                                   </label>
+                                   <Input
+                                        {...registerMedicalTags("bloodType", {
+                                             required:
+                                                  " Blood type is required",
+                                        })}
+                                        className="w-full p-2 border rounded"
+                                        placeholder="Blood Type"
+                                   />
+                                   {errorsMedicalTags.bloodType && (
+                                        <span className="text-red-500 text-sm">
+                                             {
+                                                  errorsMedicalTags.bloodType
+                                                       .message
+                                             }
+                                        </span>
+                                   )}
+                              </div>
+
+                              <div>
+                                   <label className="block mb-1">
+                                        Health Conditions
+                                   </label>
+                                   <Input
+                                        {...registerMedicalTags(
+                                             "healthConditions",
+                                             {
+                                                  required:
+                                                       " Health condition is required",
+                                             },
+                                        )}
+                                        className="w-full p-2 border rounded"
+                                        placeholder="Healthcondition"
+                                   />
+                                   {errorsMedicalTags.healthConditions && (
+                                        <span className="text-red-500 text-sm">
+                                             {
+                                                  errorsMedicalTags
+                                                       .healthConditions.message
+                                             }
+                                        </span>
+                                   )}
+                              </div>
+
+                              <div>
+                                   <label className="block mb-1">
+                                        Allergies
+                                   </label>
+                                   <Input
+                                        {...registerMedicalTags("allergies", {
+                                             required:
+                                                  " Allergies condition is required",
+                                        })}
+                                        className="w-full p-2 border rounded"
+                                        placeholder="Allergies"
+                                   />
+                                   {errorsMedicalTags.allergies && (
+                                        <span className="text-red-500 text-sm">
+                                             {
+                                                  errorsMedicalTags.allergies
+                                                       .message
+                                             }
+                                        </span>
+                                   )}
+                              </div>
+                              <div>
+                                   <label className="block mb-1">
+                                        Main Doctor
+                                   </label>
+                                   <Input
+                                        {...registerMedicalTags("mainDoctor", {
+                                             required: " Doctor is required",
+                                        })}
+                                        className="w-full p-2 border rounded"
+                                        placeholder="Main Doctor"
+                                   />
+                                   {errorsMedicalTags.mainDoctor && (
+                                        <span className="text-red-500 text-sm">
+                                             {
+                                                  errorsMedicalTags.mainDoctor
+                                                       .message
+                                             }
+                                        </span>
+                                   )}
+                              </div>
 
                               <Button
                                    type="submit"
@@ -203,7 +517,7 @@ const BillingDetails = () => {
                </Tabs>
 
                {/* Left Section: Product Details */}
-               <div className="mt-24">
+               <div className="order-1 md:order-2  ">
                     <div className="flex gap-5">
                          <Image
                               src={`${domain}${

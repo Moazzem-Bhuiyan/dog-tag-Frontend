@@ -19,8 +19,14 @@ const ModifyCustomCustomText = () => {
                <CustomHeadline title="Modify Custom Text" />
 
                <div className=" md:grid lg:grid-cols-2 gap-20 justify-center items-center w-full lg:max-w-[50%] mx-auto ">
-                    <DogTagone onChange={(data) => setForm1Data(data)} />
-                    <DogtagTwo onChange={(data) => setForm2Data(data)} />
+                    <div className="mb-10 md:mb-0 p-5">
+                         {" "}
+                         <DogTagone onChange={(data) => setForm1Data(data)} />
+                    </div>
+
+                    <div className="p-5">
+                         <DogtagTwo onChange={(data) => setForm2Data(data)} />
+                    </div>
                </div>
 
                <div className=" flex justify-center p-2">

@@ -14,7 +14,7 @@ const FontTypeOne = () => {
                     />
                </section>
 
-               <div className=" md:grid gap-10 md:grid-cols-3">
+               <div className=" md:grid gap-10 md:grid-cols-3 p-5">
                     <div className=" col-span-1">
                          <Image className=" w-full" src={font1} alt="img" />
                     </div>
