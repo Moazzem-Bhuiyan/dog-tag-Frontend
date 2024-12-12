@@ -9,18 +9,21 @@ export const useLogin = () => useContext(LoginContext);
 export const LoginProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const login = (accessToken) => {
-    localStorage.setItem("accessToken", accessToken);
+  const login = ({accessToken,refreshToken}) => {
+    // localStorage.setItem("accessToken", accessToken);
+    // localStorage.setItem("refreshToken", refreshToken );
     setIsLoggedIn(true);
   };
 
   const logout = () => {
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+
     setIsLoggedIn(false);
   };
 
   return (
-    <LoginContext.Provider value={{ isLoggedIn, login, logout }}>
+    <LoginContext.Provider value={{ isLoggedIn, login, logout,setIsLoggedIn }}>
       {children}
     </LoginContext.Provider>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, {useState} from "react";
 import {Checkbox, Modal, message} from "antd";
 import {useForm} from "react-hook-form";
 import {useRouter} from "next/navigation"; // Use this for navigation in Next.js App Router
@@ -8,40 +8,50 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {loginUser} from "@/Services/actions/loginUser";
 import {toast} from "sonner";
-import { useLogin } from "@/components/context/LoginContext";
-
+import {useLogin} from "@/components/context/LoginContext";
+import EyeIconInverse from "@/components/EyeConinverse/EyeConinverse";
 
 const LoginPage = ({isOpen, onClose, onSignupClick, onForgetPasswordClick}) => {
-     const { register, handleSubmit, reset, formState: { errors } } = useForm();
-  const { login } = useLogin(); // Get login function from context
-  const router = useRouter();
-  const [loading, setLoading] = React.useState(false);
+     const {
+          register,
+          handleSubmit,
+          reset,
+          formState: {errors},
+     } = useForm();
+     const {login} = useLogin(); // Get login function from context
+     const router = useRouter();
+     const [loading, setLoading] = React.useState(false);
 
-  const onSubmit = async (values) => {
-    setLoading(true);
+     const [showPassword, setShowPassword] = useState(false);
 
-    try {
-      const res = await loginUser(values);  // Assuming this is your API call
+     const onSubmit = async (values) => {
+          setLoading(true);
 
-      const { accessToken, refreshToken, user } = res.data;
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+          try {
+               const res = await loginUser(values); 
 
-      // Call login from context to update state
-      login(accessToken);
+               const {accessToken, refreshToken, user} = res.data;
 
-      toast.success(`Welcome back, ${user.name}!`);
+              
+               localStorage.setItem("accessToken", accessToken);
+               localStorage.setItem("refreshToken", refreshToken);
+               
 
-      // Redirect to the homepage
-      router.push('/');
-      onClose();
-    } catch (error) {
-      toast.error('Login failed!');
-    } finally {
-      setLoading(false);
-      reset();
-    }
-  };
+               // Call login from context to update state
+               login(accessToken, refreshToken);
+
+               toast.success(`Welcome back, ${user.name}!`);
+
+               // Redirect to the homepage
+               router.back();
+               onClose();
+          } catch (error) {
+               toast.error("Login failed!");
+          } finally {
+               setLoading(false);
+               reset();
+          }
+     };
 
      return (
           <Modal centered open={isOpen} onCancel={onClose} footer={null}>
@@ -76,13 +86,13 @@ const LoginPage = ({isOpen, onClose, onSignupClick, onForgetPasswordClick}) => {
                          )}
                     </div>
 
-                    <div>
+                    <div className=" relative ">
                          <label htmlFor="password" className="block text-white">
                               Password
                          </label>
                          <Input
                               id="password"
-                              type="password"
+                              type={showPassword ? "password" : "text"}
                               {...register("password", {
                                    required: "Password is required",
                                    minLength: {
@@ -93,6 +103,11 @@ const LoginPage = ({isOpen, onClose, onSignupClick, onForgetPasswordClick}) => {
                               className="border p-2 w-full"
                               placeholder="Enter your password"
                          />
+                         <EyeIconInverse
+                              showPassword={showPassword}
+                              setShowPassword={setShowPassword}
+                         />
+
                          {errors.password && (
                               <p className="text-red-500 text-sm">
                                    {errors.password.message}

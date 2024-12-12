@@ -12,7 +12,7 @@ import {
      FormMessage,
 } from "@/components/ui/form";
 import {InputOTP, InputOTPGroup, InputOTPSlot} from "@/components/ui/input-otp";
-import { toast } from "sonner";
+import {toast} from "sonner";
 
 export function VerifyCodeForm({OnupdatePassClick}) {
      const form = useForm({
@@ -32,8 +32,6 @@ export function VerifyCodeForm({OnupdatePassClick}) {
      const token = localStorage.getItem("forgot-token");
 
      function onSubmit(data) {
-
-      
           // console.log("OTP Submitted:", data, token);
 
           axios.post(
@@ -60,13 +58,15 @@ export function VerifyCodeForm({OnupdatePassClick}) {
                .catch((error) => {
                     console.error("Error during API call:", error);
                     if (error.response) {
-                        
                          // alert(
                          //      error.response.data.message ||
                          //           "An error occurred.",
                          // );
 
-                         toast.error(error.response.data.message || "An error occurred")
+                         toast.error(
+                              error.response.data.message ||
+                                   "An error occurred",
+                         );
                     } else {
                          alert("An error occurred. Please try again.");
                     }
@@ -77,7 +77,7 @@ export function VerifyCodeForm({OnupdatePassClick}) {
           <Form {...form}>
                <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="w-2/3 space-y-6">
+                    className="w-full mx-auto space-y-6">
                     <FormField
                          control={form.control}
                          name="otp"
@@ -85,7 +85,7 @@ export function VerifyCodeForm({OnupdatePassClick}) {
                               <FormItem>
                                    <FormControl>
                                         <InputOTP maxLength={6} {...field}>
-                                             <InputOTPGroup className="text-white">
+                                             <InputOTPGroup className="text-white ml-5">
                                                   <InputOTPSlot index={0} />
                                                   <InputOTPSlot index={1} />
                                                   <InputOTPSlot index={2} />
@@ -105,7 +105,12 @@ export function VerifyCodeForm({OnupdatePassClick}) {
                          )}
                     />
 
-                    <Button type="submit">Submit</Button>
+                    <div className=" flex justify-cente ">
+                         {" "}
+                         <Button type="submit" className=" w-full">
+                              Submit
+                         </Button>{" "}
+                    </div>
                </form>
           </Form>
      );

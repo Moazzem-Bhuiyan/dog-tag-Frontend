@@ -40,7 +40,6 @@ const ProductDetails = ({product}) => {
                quantity,
                image: productDetails.images[0]?.url || "default-image-url",
 
-               // why here image is not available?
            });
 
           setCardProducts({

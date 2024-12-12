@@ -10,6 +10,7 @@ import {registerUser} from "@/Services/actions/registeruser";
 import {verifyOtp} from "@/Services/actions/verifyOtp";
 
 import {toast} from "sonner";
+import EyeIconInverse from "@/components/EyeConinverse/EyeConinverse";
 
 const RegisterModal = ({isOpen, onClose, onLoginClick}) => {
      const {
@@ -18,6 +19,7 @@ const RegisterModal = ({isOpen, onClose, onLoginClick}) => {
           formState: {errors},
           reset,
      } = useForm();
+     const [showPassword, setShowPassword] = useState(false);
 
      const [isLoading, setIsLoading] = useState(false);
      const [otpModalVisible, setOtpModalVisible] = useState(false);
@@ -94,6 +96,7 @@ const RegisterModal = ({isOpen, onClose, onLoginClick}) => {
                               </label>
                               <Input
                                    id="name"
+                                   placeholder="Enter your name"
                                    {...register("name", {
                                         required: "Name is required",
                                    })}
@@ -114,6 +117,7 @@ const RegisterModal = ({isOpen, onClose, onLoginClick}) => {
                               </label>
                               <Input
                                    id="email"
+                                       placeholder="Enter your email"
                                    {...register("email", {
                                         required: "Email is required",
                                    })}
@@ -126,7 +130,7 @@ const RegisterModal = ({isOpen, onClose, onLoginClick}) => {
                               )}
                          </div>
 
-                         <div>
+                         <div className=" relative">
                               <label
                                    htmlFor="password"
                                    className="block text-white">
@@ -134,12 +138,17 @@ const RegisterModal = ({isOpen, onClose, onLoginClick}) => {
                               </label>
                               <Input
                                    id="password"
-                                   type="password"
+                               placeholder="Enter your passsword"
+                               type={showPassword ? "password" : "text"}
                                    {...register("password", {
                                         required: "Password is required",
                                    })}
                                    className="border p-2 w-full"
                               />
+                                <EyeIconInverse
+                              showPassword={showPassword}
+                              setShowPassword={setShowPassword}
+                         />
                               {errors.password && (
                                    <p className="text-red-500">
                                         {errors.password.message}

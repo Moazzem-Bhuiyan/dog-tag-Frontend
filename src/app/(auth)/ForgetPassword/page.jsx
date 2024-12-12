@@ -24,7 +24,10 @@ const ForgetPasswordModal = ({isOpen, onClose, onpenVerifyCodeclick}) => {
                );
 
                if (response.data.success) {
-                localStorage.setItem('forgot-token', response.data.data.token)
+                    localStorage.setItem(
+                         "forgot-token",
+                         response.data.data.token,
+                    );
                     onpenVerifyCodeclick();
                     console.log("OTP Sent:", response.data.message);
                } else {
@@ -42,6 +45,9 @@ const ForgetPasswordModal = ({isOpen, onClose, onpenVerifyCodeclick}) => {
                <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col gap-4 py-10">
+                         <h1 className="text-center text-2xl font-bold text-white">
+                              Forgot Password
+                         </h1>
                     <div>
                          <label htmlFor="email" className="block text-white">
                               Email

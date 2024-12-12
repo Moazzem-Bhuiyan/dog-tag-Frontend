@@ -2,11 +2,17 @@
 
 import {useProducts} from "@/components/context/ProductContext";
 import ProductList from "@/components/product/ProductList";
+import {Skeleton} from "antd";
 
 const AllProducts = () => {
      const {products, loading, error} = useProducts();
 
-     if (loading) return <div>Loading...</div>;
+     if (loading)
+          return (
+               <div>
+                    <Skeleton />{" "}
+               </div>
+          );
      if (error) return <div>{error}</div>;
 
      return (

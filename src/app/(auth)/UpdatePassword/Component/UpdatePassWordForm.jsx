@@ -5,12 +5,14 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {useForm} from "react-hook-form";
 import axios from "axios";
-import { toast } from "sonner";
+import {toast} from "sonner";
+import EyeIconInverse from "@/components/EyeConinverse/EyeConinverse";
 
 const UpdatePasswordForm = ({isOpen, onClose, onpenVerifyCodeclick}) => {
      const [loading, setLoading] = useState(false);
      const [errorMessage, setErrorMessage] = useState("");
      const [token, setToken] = useState(""); // State to store the token
+     const [showPassword, setShowPassword] = useState(false);
 
      const {
           register,
@@ -49,11 +51,12 @@ const UpdatePasswordForm = ({isOpen, onClose, onpenVerifyCodeclick}) => {
                );
 
                console.log("Password updated:", response.data);
-
+               
                if (response.data.success) {
-                    alert("Password updated successfully!");
+                    
 
                     toast.success("Password updated successfully!");
+
                     onClose(); // Close the modal
                } else {
                     setErrorMessage(
@@ -76,7 +79,15 @@ const UpdatePasswordForm = ({isOpen, onClose, onpenVerifyCodeclick}) => {
                <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col gap-4 py-10">
-                    <div>
+
+                         <h1 className="text-center text-2xl font-bold text-white">
+                              Update Password
+                         </h1>
+                       
+                    
+
+
+                    <div className=" relative">
                          <label
                               htmlFor="NewPassword"
                               className="block text-white">
@@ -92,7 +103,11 @@ const UpdatePasswordForm = ({isOpen, onClose, onpenVerifyCodeclick}) => {
                                    },
                               })}
                               className="border p-2 w-full"
-                              type="password"
+                              type={showPassword ? "password" : "text"}
+                         />
+                           <EyeIconInverse
+                              showPassword={showPassword}
+                              setShowPassword={setShowPassword}
                          />
                          {errors.NewPassword && (
                               <p className="text-red-500">
@@ -101,7 +116,7 @@ const UpdatePasswordForm = ({isOpen, onClose, onpenVerifyCodeclick}) => {
                          )}
                     </div>
 
-                    <div>
+                    <div className=" relative">
                          <label
                               htmlFor="ConfirmPassword"
                               className="block text-white">
@@ -117,7 +132,11 @@ const UpdatePasswordForm = ({isOpen, onClose, onpenVerifyCodeclick}) => {
                                    },
                               })}
                               className="border p-2 w-full"
-                              type="password"
+                              type={showPassword ? "password" : "text"}
+                         />
+                           <EyeIconInverse
+                              showPassword={showPassword}
+                              setShowPassword={setShowPassword}
                          />
                          {errors.ConfirmPassword && (
                               <p className="text-red-500">

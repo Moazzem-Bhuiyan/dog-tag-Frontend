@@ -6,16 +6,19 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import {Skeleton} from "antd";
 import axios from "axios";
 
 import Image from "next/image";
-import {redirect} from "next/navigation";
+import {redirect, useRouter} from "next/navigation";
+
 import React, {useContext, useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {toast} from "sonner";
 
 const BillingDetails = () => {
      const {cardProducts} = useContext(ProductContext);
+     const router = useRouter();
 
      // Product details extract
 
@@ -25,6 +28,17 @@ const BillingDetails = () => {
 
      const defaultorderType = "regular";
      const orderType = selectTab;
+
+     useEffect(() => {
+          const token = localStorage.getItem("accessToken");
+          if (!token) {
+               
+
+
+               router.push("/Login");
+              
+          }
+     }, [router]);
 
      useEffect(() => {
           console.log("cardProduct from useEffect", cardProducts);
@@ -50,147 +64,265 @@ const BillingDetails = () => {
 
      // items tags submit button and backend logic here :
 
+
      const onSubmitItemTags = async (data) => {
           // validation and backend logic here :
-          const finalData = {...data, orderType};
-
+          const finalData = { ...data, orderType };
+        
           const formDataWithProductId = {
-               billingDetails: finalData,
-
-               orderType: defaultorderType,
-               product: productDetails?.id,
-               quantity: productDetails?.quantity,
-               totalAmount: total,
+            billingDetails: finalData,
+            orderType: defaultorderType,
+            product: productDetails?.id,
+            quantity: productDetails?.quantity,
+            totalAmount: total,
           };
-
+        
           const orderPaymentLoading = toast.loading("Order creating....");
-          // create order api......
+        
           try {
-               const res = await axios.post(
-                    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/orders`,
-                    formDataWithProductId,
+            // Send the order creation request
+            const res = await axios.post(
+              `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/orders`,
+              formDataWithProductId,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+        
+            const orderId = await res.data?.data;
+        
+            // Payment API request
+            try {
+              const paymentRes = await axios.post(
+                `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments/checkout`,
+                {
+                  order: orderId,
+                },
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
+        
+              const paymentLink = paymentRes?.data?.data;
+        
+              if (!paymentLink) {
+                return toast.error("Payment failed", {
+                  id: orderPaymentLoading,
+                });
+              }
+        
+              toast.success("Order created successfully", {
+                id: orderPaymentLoading,
+              });
+        
+              // Redirect to payment page
+              if (window !== undefined) {
+                window.location.href = paymentLink;
+              }
+            } catch (error) {
+              if (error.response && error.response.status === 401) {
+
+                // Token expired, try refreshing it
+                try {
+                  const refreshRes = await axios.post(
+                    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/refresh-token`,
                     {
-                         headers: {
-                              Authorization: `Bearer ${token}`,
-                         },
-                    },
-               );
-
-               const orderId = await res.data?.data;
-
-               // Payment api....
-               try {
-                    const res = await axios.post(
-                         `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments/checkout`,
-                         {
-                              order: orderId,
-                         },
-                         {
-                              headers: {
-                                   Authorization: `Bearer ${token}`,
-                              },
-                         },
+                      refreshToken: localStorage.getItem('refreshToken'), // assuming you store refresh token in localStorage
+                    }
+                  );
+        
+                  const newAccessToken = refreshRes.data?.accessToken;
+        
+                  if (newAccessToken) {
+                    // Update token and retry the original request
+                    localStorage.setItem('accessToken', newAccessToken);
+        
+                    // Retry the original request
+                    const retryRes = await axios.post(
+                      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments/checkout`,
+                      {
+                        order: orderId,
+                      },
+                      {
+                        headers: {
+                          Authorization: `Bearer ${newAccessToken}`,
+                        },
+                      }
                     );
-
-                    const paymentLink = await res?.data?.data;
-
-                    if (!paymentLink) {
-                         return toast.error("Payment failed", {
-                              id: orderPaymentLoading,
-                         });
+        
+                    const retryPaymentLink = retryRes?.data?.data;
+        
+                    if (!retryPaymentLink) {
+                      return toast.error("Payment failed", {
+                        id: orderPaymentLoading,
+                      });
                     }
-
+        
                     toast.success("Order created successfully", {
-                         id: orderPaymentLoading,
+                      id: orderPaymentLoading,
                     });
-
-                    // Redirection: redirect to payment page
-
+        
+                    // Redirect to payment page
                     if (window !== undefined) {
-                         window.location.href = paymentLink;
+                      window.location.href = retryPaymentLink;
                     }
-               } catch (error) {
-                    console.error(error);
-               }
+                  } else {
+                    throw new Error('Failed to refresh token');
+                  }
+                } catch (refreshError) {
+                  console.error("Refresh token error:", refreshError);
+                  toast.error("Session expired, please log in again.", {
+                    id: orderPaymentLoading,
+                  });
+                }
+              }
+            }
           } catch (error) {
-               console.error("Error:", error);
+            console.error("Error:", error);
+            toast.error("An error occurred. Please try again.", {
+              id: orderPaymentLoading,
+            });
           }
-     };
+        };
+        
 
      // medicaltags submit button and backend logic
 
      const onSubmitMedicalTags = async (data) => {
           // validation and backend logic here :
-          const finalData = {...data, orderType};
-
+          const finalData = { ...data, orderType };
+        
           const formDataWithProductId = {
-               billingDetails: finalData,
-
-               orderType: defaultorderType,
-               product: productDetails?.id,
-               quantity: productDetails?.quantity,
-               totalAmount: total,
+            billingDetails: finalData,
+            orderType: defaultorderType,
+            product: productDetails?.id,
+            quantity: productDetails?.quantity,
+            totalAmount: total,
           };
-
-          // const orderPaymentLoading = toast.loading("Order creating....");
-          // create order api......
+        
           const orderPaymentLoading = toast.loading("Order creating....");
+        
           try {
-               const res = await axios.post(
-                    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/orders`,
-                    formDataWithProductId,
+            // Send the order creation request
+            const res = await axios.post(
+              `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/orders`,
+              formDataWithProductId,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+        
+            const orderId = await res.data?.data;
+        
+            // Payment API request
+            try {
+              const paymentRes = await axios.post(
+                `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments/checkout`,
+                {
+                  order: orderId,
+                },
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
+        
+              const paymentLink = paymentRes?.data?.data;
+        
+              if (!paymentLink) {
+                return toast.error("Payment failed", {
+                  id: orderPaymentLoading,
+                });
+              }
+        
+              toast.success("Order created successfully", {
+                id: orderPaymentLoading,
+              });
+        
+              // Redirect to payment page
+              if (window !== undefined) {
+                window.location.href = paymentLink;
+              }
+            } catch (error) {
+              if (error.response && error.response.status === 401) {
+                // Token expired, try refreshing it
+                try {
+                  const refreshRes = await axios.post(
+                    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/refresh-token`,
                     {
-                         headers: {
-                              Authorization: `Bearer ${token}`,
-                         },
-                    },
-               );
-
-               const orderId = await res.data?.data;
-
-               // Payment api....
-               try {
-                    const res = await axios.post(
-                         `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments/checkout`,
-                         {
-                              order: orderId,
-                         },
-                         {
-                              headers: {
-                                   Authorization: `Bearer ${token}`,
-                              },
-                         },
+                      refreshToken: localStorage.getItem('refreshToken'), // assuming you store refresh token in localStorage
+                    }
+                  );
+        
+                  const newAccessToken = refreshRes.data?.accessToken;
+        
+                  if (newAccessToken) {
+                    // Update token and retry the original request
+                    localStorage.setItem('accessToken', newAccessToken);
+        
+                    // Retry the original request
+                    const retryRes = await axios.post(
+                      `${process.env.NEXT_PUBLIC.BACKEND_API_URL}/payments/checkout`,
+                      {
+                        order: orderId,
+                      },
+                      {
+                        headers: {
+                          Authorization: `Bearer ${newAccessToken}`,
+                        },
+                      }
                     );
-
-                    const paymentLinkk = await res?.data?.data;
-
-                    if (!paymentLinkk) {
-                         return toast.error("Payment failed", {
-                              id: orderPaymentLoading,
-                         });
+        
+                    const retryPaymentLink = retryRes?.data?.data;
+        
+                    if (!retryPaymentLink) {
+                      return toast.error("Payment failed", {
+                        id: orderPaymentLoading,
+                      });
                     }
-
+        
                     toast.success("Order created successfully", {
-                         id: orderPaymentLoading,
+                      id: orderPaymentLoading,
                     });
-
-                    // Redirection: redirect to payment page
-
+        
+                    // Redirect to payment page
                     if (window !== undefined) {
-                         window.location.href = paymentLinkk;
+                      window.location.href = retryPaymentLink;
                     }
-               } catch (error) {
-                    console.error(error);
-               }
+                  } else {
+                    throw new Error('Failed to refresh token');
+                  }
+                } catch (refreshError) {
+                  console.error("Refresh token error:", refreshError);
+                  toast.error("Session expired, please log in again.", {
+                    id: orderPaymentLoading,
+                  });
+                }
+              }
+            }
           } catch (error) {
-               console.error("Error:", error);
+            console.error("Error:", error);
+            toast.error("An error occurred. Please try again.", {
+              id: orderPaymentLoading,
+            });
           } finally {
-               reset();
+            reset(); // reset the form after the request is completed
           }
-     };
-
+        };
+        
      if (!productDetails) {
-          return <p>Loading Billing details...</p>;
+          return (
+               <p>
+                    <Skeleton />
+               </p>
+          );
      }
 
      const subtotal = productDetails?.price * (productDetails?.quantity || 1);
@@ -365,6 +497,7 @@ const BillingDetails = () => {
                                         })}
                                         className="w-full p-2 border rounded"
                                         placeholder="Date of Birth"
+                                        type="date"
                                    />
                                    {errorsMedicalTags.dob && (
                                         <span className="text-red-500 text-sm">
@@ -399,7 +532,7 @@ const BillingDetails = () => {
                               </div>
                               <div>
                                    <label className="block mb-1">
-                                        Emargency Contact
+                                       Contact
                                    </label>
                                    <Input
                                         {...registerMedicalTags("phoneNumber", {

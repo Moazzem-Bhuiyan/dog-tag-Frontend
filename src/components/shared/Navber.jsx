@@ -6,21 +6,18 @@ import {FaBars, FaTimes} from "react-icons/fa";
 import { useLogin } from "../context/LoginContext";
 
 const Navber = ({onLoginClick}) => {
-     const { isLoggedIn, logout } = useLogin();
+     const { isLoggedIn,setIsLoggedIn } = useLogin();
      const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-     // const router = useRouter();
+   
    
      useEffect(() => {
-       const token = localStorage.getItem("accessToken");
-       if (token) {
-         // Automatically log in if the token is present
-       }
-     }, []);
+          const token = localStorage.getItem("accessToken");
+          if (token) {
+               setIsLoggedIn(true);
+          }
+        }, [setIsLoggedIn]);
    
-     // const handleLogout = () => {
-     //   logout();
-     //   router.push('/');  // Redirect to home page after logout
-     // };
+   
 
      const Navlink = [
           {title: "Home", link: "/"},
