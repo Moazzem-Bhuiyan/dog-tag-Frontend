@@ -23,6 +23,7 @@ const Navber = ({onLoginClick}) => {
           {title: "Home", link: "/"},
           {title: "Gifts", link: "#"},
           {title: "Services", link: "#"},
+          {title: "Shop", link: "/AllProducts"},
           {title: "Contact", link: "#"},
      ];
 

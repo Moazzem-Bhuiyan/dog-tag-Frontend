@@ -16,7 +16,7 @@ const AllProducts = () => {
      if (error) return <div>{toast.error(error)}</div>;
 
      return (
-          <div className="p-8 w-full md:max-w-[60%] mx-auto">
+          <div className="p-8 w-full md:max-w-[60%] mx-auto md:h-screen h-full ">
                <h1 className="text-3xl font-bold mb-6">All Products</h1>
                <ProductList products={products} />
           </div>
