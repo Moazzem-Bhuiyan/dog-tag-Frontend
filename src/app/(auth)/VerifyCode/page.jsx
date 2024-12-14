@@ -15,7 +15,7 @@ const VerifyModal = ({isOpen, onClose, OnupdatePassClick}) => {
                          enter 6 digit code that mentioned in the email
                     </p>
 
-                    <VerifyCodeForm OnupdatePassClick={OnupdatePassClick} />
+                    <VerifyCodeForm OnupdatePassClick={OnupdatePassClick} onClose={onClose}  />
                </div>
           </Modal>
      );

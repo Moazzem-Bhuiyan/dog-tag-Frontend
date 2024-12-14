@@ -10,6 +10,7 @@ import {loginUser} from "@/Services/actions/loginUser";
 import {toast} from "sonner";
 import {useLogin} from "@/components/context/LoginContext";
 import EyeIconInverse from "@/components/EyeConinverse/EyeConinverse";
+import { ErrorModal } from "../../../../../utils/CustomModal";
 
 const LoginPage = ({isOpen, onClose, onSignupClick, onForgetPasswordClick}) => {
      const {
@@ -40,13 +41,13 @@ const LoginPage = ({isOpen, onClose, onSignupClick, onForgetPasswordClick}) => {
                // Call login from context to update state
                login(accessToken, refreshToken);
 
-               toast.success(`Welcome back, ${user.name}!`);
+               toast.success(`Welcome back, ${user?.name}!`);
 
                // Redirect to the homepage
                router.back();
                onClose();
           } catch (error) {
-               toast.error("Login failed!");
+              ErrorModal(error?.message);
           } finally {
                setLoading(false);
                reset();

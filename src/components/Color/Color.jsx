@@ -3,12 +3,21 @@
 import {useState} from "react";
 import CustomHeadline from "../CustomHeadline/CustomHeadline";
 import {Button} from "../ui/button";
+import Swal from "sweetalert2";
 
 const ColorPicker = () => {
      const [selectedColor, setSelectedColor] = useState("");
 
      const handleColorChange = (color) => {
           setSelectedColor(color);
+     };
+
+     const handleSubmit = () => {
+          Swal.fire({
+               title: "Sorry",
+               text: "It’s still in development. Please try something else",
+               icon: "question",
+          });
      };
 
      return (
@@ -108,7 +117,9 @@ const ColorPicker = () => {
                </div>
 
                <div className=" flex justify-center p-5">
-                    <Button className=" bg-main text-center text-2xl w-full md:max-w-[30%] mx-auto my-20 p-2 ">
+                    <Button
+                         onClick={handleSubmit}
+                         className=" bg-main text-center text-2xl w-full md:max-w-[30%] mx-auto my-20 p-2 ">
                          Update Dog Tag
                     </Button>
                </div>

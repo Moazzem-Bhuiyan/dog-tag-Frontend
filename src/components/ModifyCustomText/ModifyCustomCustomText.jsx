@@ -5,14 +5,23 @@ import {Button} from "../ui/button";
 import DogTagone from "./component/DogTagone";
 import DogtagTwo from "./component/DogtagTwo";
 import {useFormContext} from "../context/FormContext";
+import Swal from "sweetalert2";
 
 const ModifyCustomCustomText = () => {
      const [form1Data, setForm1Data] = useState({});
      const [form2Data, setForm2Data] = useState({});
      const {saveFormData} = useFormContext();
+     
      const handleGlobalSubmit = () => {
-          saveFormData("form1", form1Data);
-          saveFormData("form2", form2Data);
+
+           Swal.fire({
+                         title: "Sorry",
+                         text: "It’s still in development. Please try something else",
+                         icon: "question",
+                    });
+
+          // saveFormData("form1", form1Data);
+          // saveFormData("form2", form2Data);
      };
      return (
           <div>

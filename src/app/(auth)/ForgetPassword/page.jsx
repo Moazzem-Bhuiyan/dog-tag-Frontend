@@ -29,7 +29,7 @@ const ForgetPasswordModal = ({isOpen, onClose, onpenVerifyCodeclick}) => {
                          response.data.data.token,
                     );
                     onpenVerifyCodeclick();
-                    console.log("OTP Sent:", response.data.message);
+                
                } else {
                     console.error("Error sending OTP:", response.data.message);
                }
@@ -70,8 +70,8 @@ const ForgetPasswordModal = ({isOpen, onClose, onpenVerifyCodeclick}) => {
                          type="submit"
                          className="relative group px-6 py-3 font-medium text-black bg-black overflow-hidden mt-5"
                          disabled={loading}>
-                         <span className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 transform origin-top-left group-hover:origin-top-left transition-transform duration-1000 ease-in-out"></span>
-                         <span className="z-50 relative text-white group-hover:text-black transition-colors duration-1000 ease-in-out">
+                         <span className="absolute inset-0 border-2 border-white  bg-white scale-x-0 group-hover:scale-x-100 transform origin-top-left group-hover:origin-top-left transition-transform duration-1000 ease-in-out"></span>
+                         <span className="z-50 relative text-white group-hover:text-black transition-colors duration-1000 ease-in-out ">
                               {loading ? "Sending..." : "Send Code"}
                          </span>
                     </Button>

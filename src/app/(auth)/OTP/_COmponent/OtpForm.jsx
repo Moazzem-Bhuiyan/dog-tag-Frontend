@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 
-const OtpVerificationModal = ({isOpen, otpToken, email, onSuccess}) => {
+const OtpVerificationModal = ({isOpen, otpToken, email, onSuccess,setIsOpen}) => {
      const {register, handleSubmit} = useForm();
 
      const onSubmit = async (data) => {

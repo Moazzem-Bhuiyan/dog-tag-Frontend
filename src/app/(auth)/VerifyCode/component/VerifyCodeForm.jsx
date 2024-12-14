@@ -14,7 +14,8 @@ import {
 import {InputOTP, InputOTPGroup, InputOTPSlot} from "@/components/ui/input-otp";
 import {toast} from "sonner";
 
-export function VerifyCodeForm({OnupdatePassClick}) {
+export function VerifyCodeForm({OnupdatePassClick,onClose}) {
+     
      const form = useForm({
           defaultValues: {
                pin: "",
@@ -50,7 +51,9 @@ export function VerifyCodeForm({OnupdatePassClick}) {
 
                          localStorage.setItem("reset-token", token);
 
+                         form.reset();
                          OnupdatePassClick();
+                         
                     } else {
                          alert(response.data.message || "Verification failed.");
                     }
@@ -67,10 +70,14 @@ export function VerifyCodeForm({OnupdatePassClick}) {
                               error.response.data.message ||
                                    "An error occurred",
                          );
+                         form.reset();
                     } else {
                          alert("An error occurred. Please try again.");
                     }
+
+                   
                });
+
      }
 
      return (
