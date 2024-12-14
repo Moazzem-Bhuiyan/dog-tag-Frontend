@@ -2,6 +2,7 @@
 
 import React, {createContext, useContext, useEffect, useState} from "react";
 import axios from "axios";
+import { toast } from "sonner";
 
 export const ProductContext = createContext();
 
@@ -24,7 +25,9 @@ export const ProductProvider = ({children}) => {
                     setProducts(response.data.data.data);
                     setLoading(false);
                } catch (err) {
+                    // toast.error(err.message)
                     setError("Server error: " + err);
+
                     setLoading(false);
                }
           };

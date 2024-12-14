@@ -13,7 +13,7 @@ const AllProducts = () => {
                     <Skeleton />{" "}
                </div>
           );
-     if (error) return <div>{error}</div>;
+     if (error) return <div>{toast.error(error)}</div>;
 
      return (
           <div className="p-8 w-full md:max-w-[60%] mx-auto">
