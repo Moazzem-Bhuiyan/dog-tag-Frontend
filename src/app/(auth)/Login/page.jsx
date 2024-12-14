@@ -10,6 +10,7 @@ import VerifyModal from "../VerifyCode/page";
 import UpdatePasswordForm from "../UpdatePassword/Component/UpdatePasswordForm";
 
 
+
 const Page = () => {
      const [isLoginOpen, setIsLoginOpen] = useState(true);
      const [isRegisterOpen, setIsRegisterOpen] = useState(false);
