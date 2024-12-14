@@ -28,20 +28,22 @@ const BillingDetails = () => {
 
      const defaultorderType = "regular";
      const orderType = selectTab;
+     const [token, setToken] = useState(null);  // State for storing token
 
+     // Get token only when running on the client-side
      useEffect(() => {
-          const token = localStorage.getItem("accessToken");
-          if (!token) {
-               
-
-
-               router.push("/Login");
-              
-          }
+       if (typeof window !== "undefined") {
+         const storedToken = localStorage.getItem("accessToken");
+         if (!storedToken) {
+           router.push("/Login");
+         } else {
+           setToken(storedToken);  // Set token in state
+         }
+       }
      }, [router]);
 
      useEffect(() => {
-          console.log("cardProduct from useEffect", cardProducts);
+        
           if (!cardProducts) {
                redirect("/");
           }
@@ -60,263 +62,308 @@ const BillingDetails = () => {
           reset,
      } = useForm();
 
-     const token = localStorage.getItem("accessToken");
+     // const token = localStorage.getItem("accessToken");
 
      // items tags submit button and backend logic here :
 
-
      const onSubmitItemTags = async (data) => {
           // validation and backend logic here :
-          const finalData = { ...data, orderType };
-        
-          const formDataWithProductId = {
-            billingDetails: finalData,
-            orderType: defaultorderType,
-            product: productDetails?.id,
-            quantity: productDetails?.quantity,
-            totalAmount: total,
-          };
-        
-          const orderPaymentLoading = toast.loading("Order creating....");
-        
-          try {
-            // Send the order creation request
-            const res = await axios.post(
-              `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/orders`,
-              formDataWithProductId,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
-        
-            const orderId = await res.data?.data;
-        
-            // Payment API request
-            try {
-              const paymentRes = await axios.post(
-                `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments/checkout`,
-                {
-                  order: orderId,
-                },
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                }
-              );
-        
-              const paymentLink = paymentRes?.data?.data;
-        
-              if (!paymentLink) {
-                return toast.error("Payment failed", {
-                  id: orderPaymentLoading,
-                });
-              }
-        
-              toast.success("Order created successfully", {
-                id: orderPaymentLoading,
-              });
-        
-              // Redirect to payment page
-              if (window !== undefined) {
-                window.location.href = paymentLink;
-              }
-            } catch (error) {
-              if (error.response && error.response.status === 401) {
+          const finalData = {...data, orderType};
 
-                // Token expired, try refreshing it
-                try {
-                  const refreshRes = await axios.post(
-                    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/refresh-token`,
+          const formDataWithProductId = {
+               billingDetails: finalData,
+               orderType: defaultorderType,
+               product: productDetails?.id,
+               quantity: productDetails?.quantity,
+               totalAmount: total,
+          };
+
+          const orderPaymentLoading = toast.loading("Order creating....");
+
+          try {
+               // Send the order creation request
+               const res = await axios.post(
+                    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/orders`,
+                    formDataWithProductId,
                     {
-                      refreshToken: localStorage.getItem('refreshToken'), // assuming you store refresh token in localStorage
-                    }
-                  );
-        
-                  const newAccessToken = refreshRes.data?.accessToken;
-        
-                  if (newAccessToken) {
-                    // Update token and retry the original request
-                    localStorage.setItem('accessToken', newAccessToken);
-        
-                    // Retry the original request
-                    const retryRes = await axios.post(
-                      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments/checkout`,
-                      {
-                        order: orderId,
-                      },
-                      {
-                        headers: {
-                          Authorization: `Bearer ${newAccessToken}`,
-                        },
-                      }
+                         headers: {
+                              Authorization: `Bearer ${token}`,
+                         },
+                    },
+               );
+
+               const orderId = await res.data?.data;
+
+               // Payment API request
+               try {
+                    const paymentRes = await axios.post(
+                         `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments/checkout`,
+                         {
+                              order: orderId,
+                         },
+                         {
+                              headers: {
+                                   Authorization: `Bearer ${token}`,
+                              },
+                         },
                     );
-        
-                    const retryPaymentLink = retryRes?.data?.data;
-        
-                    if (!retryPaymentLink) {
-                      return toast.error("Payment failed", {
-                        id: orderPaymentLoading,
-                      });
+
+                    const paymentLink = paymentRes?.data?.data;
+
+                    if (!paymentLink) {
+                         return toast.error("Payment failed", {
+                              id: orderPaymentLoading,
+                         });
                     }
-        
+
                     toast.success("Order created successfully", {
-                      id: orderPaymentLoading,
+                         id: orderPaymentLoading,
                     });
-        
+
                     // Redirect to payment page
                     if (window !== undefined) {
-                      window.location.href = retryPaymentLink;
+                         window.location.href = paymentLink;
                     }
-                  } else {
-                    throw new Error('Failed to refresh token');
-                  }
-                } catch (refreshError) {
-                  console.error("Refresh token error:", refreshError);
-                  toast.error("Session expired, please log in again.", {
-                    id: orderPaymentLoading,
-                  });
-                }
-              }
-            }
+               } catch (error) {
+                    if (error.response && error.response.status === 401) {
+                         // Token expired, try refreshing it
+                         try {
+                              let refreshToken = null;
+                              if (typeof window !== "undefined") {
+                                   refreshToken =
+                                        localStorage.getItem("refreshToken");
+                              }
+
+                              if (!refreshToken) {
+                                   throw new Error(
+                                        "No refresh token available",
+                                   );
+                              }
+
+                              const refreshRes = await axios.post(
+                                   `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/refresh-token`,
+                                   {
+                                        refreshToken,
+                                   },
+                              );
+
+                              const newAccessToken =
+                                   refreshRes.data?.accessToken;
+
+                              if (newAccessToken) {
+                                   // Update token on the client side
+                                   if (typeof window !== "undefined") {
+                                        localStorage.setItem(
+                                             "accessToken",
+                                             newAccessToken,
+                                        );
+                                   }
+
+                                   // Retry the original request
+                                   const retryRes = await axios.post(
+                                        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments/checkout`,
+                                        {
+                                             order: orderId,
+                                        },
+                                        {
+                                             headers: {
+                                                  Authorization: `Bearer ${newAccessToken}`,
+                                             },
+                                        },
+                                   );
+
+                                   const retryPaymentLink =
+                                        retryRes?.data?.data;
+
+                                   if (!retryPaymentLink) {
+                                        return toast.error("Payment failed", {
+                                             id: orderPaymentLoading,
+                                        });
+                                   }
+
+                                   toast.success("Order created successfully", {
+                                        id: orderPaymentLoading,
+                                   });
+
+                                   // Redirect to payment page
+                                   if (typeof window !== "undefined") {
+                                        window.location.href = retryPaymentLink;
+                                   }
+                              } else {
+                                   throw new Error("Failed to refresh token");
+                              }
+                         } catch (refreshError) {
+                              console.error(
+                                   "Refresh token error:",
+                                   refreshError,
+                              );
+                              toast.error(
+                                   "Session expired, please log in again.",
+                                   {
+                                        id: orderPaymentLoading,
+                                   },
+                              );
+                         }
+                    }
+               }
           } catch (error) {
-            console.error("Error:", error);
-            toast.error("An error occurred. Please try again.", {
-              id: orderPaymentLoading,
-            });
+               console.error("Error:", error);
+               toast.error("An error occurred. Please try again.", {
+                    id: orderPaymentLoading,
+               });
           }
-        };
-        
+     };
 
      // medicaltags submit button and backend logic
 
      const onSubmitMedicalTags = async (data) => {
           // validation and backend logic here :
-          const finalData = { ...data, orderType };
-        
+          const finalData = {...data, orderType};
+
           const formDataWithProductId = {
-            billingDetails: finalData,
-            orderType: defaultorderType,
-            product: productDetails?.id,
-            quantity: productDetails?.quantity,
-            totalAmount: total,
+               billingDetails: finalData,
+               orderType: defaultorderType,
+               product: productDetails?.id,
+               quantity: productDetails?.quantity,
+               totalAmount: total,
           };
-        
+
           const orderPaymentLoading = toast.loading("Order creating....");
-        
+
           try {
-            // Send the order creation request
-            const res = await axios.post(
-              `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/orders`,
-              formDataWithProductId,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
-        
-            const orderId = await res.data?.data;
-        
-            // Payment API request
-            try {
-              const paymentRes = await axios.post(
-                `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments/checkout`,
-                {
-                  order: orderId,
-                },
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                }
-              );
-        
-              const paymentLink = paymentRes?.data?.data;
-        
-              if (!paymentLink) {
-                return toast.error("Payment failed", {
-                  id: orderPaymentLoading,
-                });
-              }
-        
-              toast.success("Order created successfully", {
-                id: orderPaymentLoading,
-              });
-        
-              // Redirect to payment page
-              if (window !== undefined) {
-                window.location.href = paymentLink;
-              }
-            } catch (error) {
-              if (error.response && error.response.status === 401) {
-                // Token expired, try refreshing it
-                try {
-                  const refreshRes = await axios.post(
-                    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/refresh-token`,
+               // Send the order creation request
+               const res = await axios.post(
+                    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/orders`,
+                    formDataWithProductId,
                     {
-                      refreshToken: localStorage.getItem('refreshToken'), // assuming you store refresh token in localStorage
-                    }
-                  );
-        
-                  const newAccessToken = refreshRes.data?.accessToken;
-        
-                  if (newAccessToken) {
-                    // Update token and retry the original request
-                    localStorage.setItem('accessToken', newAccessToken);
-        
-                    // Retry the original request
-                    const retryRes = await axios.post(
-                      `${process.env.NEXT_PUBLIC.BACKEND_API_URL}/payments/checkout`,
-                      {
-                        order: orderId,
-                      },
-                      {
-                        headers: {
-                          Authorization: `Bearer ${newAccessToken}`,
-                        },
-                      }
+                         headers: {
+                              Authorization: `Bearer ${token}`,
+                         },
+                    },
+               );
+
+               const orderId = await res.data?.data;
+
+               // Payment API request
+               try {
+                    const paymentRes = await axios.post(
+                         `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments/checkout`,
+                         {
+                              order: orderId,
+                         },
+                         {
+                              headers: {
+                                   Authorization: `Bearer ${token}`,
+                              },
+                         },
                     );
-        
-                    const retryPaymentLink = retryRes?.data?.data;
-        
-                    if (!retryPaymentLink) {
-                      return toast.error("Payment failed", {
-                        id: orderPaymentLoading,
-                      });
+
+                    const paymentLink = paymentRes?.data?.data;
+
+                    if (!paymentLink) {
+                         return toast.error("Payment failed", {
+                              id: orderPaymentLoading,
+                         });
                     }
-        
+
                     toast.success("Order created successfully", {
-                      id: orderPaymentLoading,
+                         id: orderPaymentLoading,
                     });
-        
+
                     // Redirect to payment page
                     if (window !== undefined) {
-                      window.location.href = retryPaymentLink;
+                         window.location.href = paymentLink;
                     }
-                  } else {
-                    throw new Error('Failed to refresh token');
-                  }
-                } catch (refreshError) {
-                  console.error("Refresh token error:", refreshError);
-                  toast.error("Session expired, please log in again.", {
-                    id: orderPaymentLoading,
-                  });
-                }
-              }
-            }
+               } catch (error) {
+                    if (error.response && error.response.status === 401) {
+                         // Token expired, try refreshing it
+                         try {
+                              // Safely retrieve the refresh token from localStorage
+                              let refreshToken = null;
+                              if (typeof window !== "undefined") {
+                                   refreshToken =
+                                        localStorage.getItem("refreshToken");
+                              }
+
+                              if (!refreshToken) {
+                                   throw new Error(
+                                        "No refresh token available",
+                                   );
+                              }
+
+                              // Attempt to refresh the token
+                              const refreshRes = await axios.post(
+                                   `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/refresh-token`,
+                                   {refreshToken},
+                              );
+
+                              const newAccessToken =
+                                   refreshRes.data?.accessToken;
+
+                              if (newAccessToken) {
+                                   // Safely update the new access token in localStorage
+                                   if (typeof window !== "undefined") {
+                                        localStorage.setItem(
+                                             "accessToken",
+                                             newAccessToken,
+                                        );
+                                   }
+
+                                   // Retry the original payment request
+                                   const retryRes = await axios.post(
+                                        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments/checkout`,
+                                        {order: orderId},
+                                        {
+                                             headers: {
+                                                  Authorization: `Bearer ${newAccessToken}`,
+                                             },
+                                        },
+                                   );
+
+                                   const retryPaymentLink =
+                                        retryRes?.data?.data;
+
+                                   if (!retryPaymentLink) {
+                                        return toast.error("Payment failed", {
+                                             id: orderPaymentLoading,
+                                        });
+                                   }
+
+                                   toast.success("Order created successfully", {
+                                        id: orderPaymentLoading,
+                                   });
+
+                                   // Redirect to the payment link
+                                   if (typeof window !== "undefined") {
+                                        window.location.href = retryPaymentLink;
+                                   }
+                              } else {
+                                   throw new Error("Failed to refresh token");
+                              }
+                         } catch (refreshError) {
+                              console.error(
+                                   "Refresh token error:",
+                                   refreshError,
+                              );
+                              toast.error(
+                                   "Session expired, please log in again.",
+                                   {
+                                        id: orderPaymentLoading,
+                                   },
+                              );
+                         }
+                    }
+               }
           } catch (error) {
-            console.error("Error:", error);
-            toast.error("An error occurred. Please try again.", {
-              id: orderPaymentLoading,
-            });
+               console.error("Error:", error);
+               toast.error("An error occurred. Please try again.", {
+                    id: orderPaymentLoading,
+               });
           } finally {
-            reset(); // reset the form after the request is completed
+               reset(); // reset the form after the request is completed
           }
-        };
-        
+     };
+
      if (!productDetails) {
           return (
                <p>
@@ -531,9 +578,7 @@ const BillingDetails = () => {
                                    )}
                               </div>
                               <div>
-                                   <label className="block mb-1">
-                                       Contact
-                                   </label>
+                                   <label className="block mb-1">Contact</label>
                                    <Input
                                         {...registerMedicalTags("phoneNumber", {
                                              required: " Number is required",

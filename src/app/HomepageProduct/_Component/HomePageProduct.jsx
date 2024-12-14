@@ -51,14 +51,14 @@ const HomePageProduct = () => {
                     Featured Products
                 </h1>
                 <Link href="/AllProducts">
-                    <button className="px-6 py-2 text-white rounded mt-1.5 hover:underline">
+                    <button className="px-6 py-2 text-white rounded mt-2.5 justify-end hover:underline">
                         See All
                     </button>
                 </Link>
             </div>
 
             <motion.div
-                className="w-full lg:max-w-[60%] lg:mx-auto grid grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-20"
+                className="w-full lg:max-w-[60%] lg:mx-auto md:grid grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-20"
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"

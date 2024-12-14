@@ -38,7 +38,7 @@ const ProductDetails = ({product}) => {
                name: productDetails.name,
                price: productDetails.price,
                quantity,
-               image: productDetails.images[0]?.url || "default-image-url",
+               image: productDetails.image || "default-image-url",
 
            });
 
@@ -47,7 +47,7 @@ const ProductDetails = ({product}) => {
                id: productDetails._id,
                price: productDetails.price,
                quantity,
-               image: productDetails.images[0]?.url || "default-image-url",
+               image: productDetails.image || "default-image-url",
           });
 
           router.push("/order");
@@ -62,7 +62,7 @@ const ProductDetails = ({product}) => {
                     {/* Left Section - Product Image */}
                     <div>
                          <Image
-                              src={domain+productDetails.images[0].url}
+                              src={domain+productDetails.image}
                               alt={productDetails.name}
                               className="w-[80%] m-auto object-cover rounded-md mb-4"
                               width={1200}

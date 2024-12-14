@@ -7,11 +7,11 @@ const ProductCard = ({product}) => {
      // console.log("domain", domain)
 
      return (
-          <div className=" w-[200px] md:w-[250px] lg:w-[300px] mx-auto p-4 rounded border shadow-none transition-shadow duration-300 cursor-pointer hover:shadow-lg hover:shadow-white ">
+          <div className=" w-[300px] md:w-[250px] lg:w-[300px] mx-auto p-4 my-5 md:my-0 rounded border shadow-none transition-shadow duration-300 cursor-pointer hover:shadow-lg hover:shadow-white ">
                <Link href={`/ProductDetails/${product._id}`}>
                     <Image
                          src={
-                              domain + product.images[0]?.url ||
+                              domain + product.image ||
                               "/placeholder.png"
                          }
                          alt="Product img"
